@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8-Hour Mandatory OSH Training Monitoring</title>
+<style>
+:root{--bg:#0b0b0b;--card:#161616;--tx:#f4f4f4;--mu:#a1a1a1;--bd:#2f2f2f;--ac:#facc15;--ac2:#3b3200;--wr:#facc15;--rd:#f87171;--okbg:#14532d;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:22px 16px 18px;background:linear-gradient(135deg,#000,#2a2200);color:#facc15;border-bottom:3px solid #facc15;border-radius:0 0 22px 22px;box-shadow:0 6px 18px rgba(250,204,21,.2)}h1{font-size:20px;margin:0}.sub{color:var(--mu);font-size:12px}header .sub{color:#fde68a}
+nav{display:flex;gap:6px;padding:12px 16px;overflow-x:auto}
+nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}
+main{padding:0 16px 40px;max-width:1100px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;box-shadow:0 2px 8px rgba(250,204,21,.08)}
+.card b{display:block;font-size:26px;color:var(--ac)}.card span{color:var(--mu);font-size:12px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(250,204,21,.08)}
+.box h2{font-size:15px;margin:0 0 8px;color:var(--ac)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+input,select,button.b{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+button.b{cursor:pointer}button.p{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}button.d{color:var(--rd);border-color:var(--rd)}button.b{border-radius:10px;font-weight:500}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{color:var(--ac);font-weight:600}
+td select{padding:4px 6px;font-size:12px}
+.bar{height:8px;background:var(--bd);border-radius:4px;min-width:80px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#eab308,#facc15);border-radius:4px}
+.tag{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--ac2);color:var(--ac)}
+tr.ok td{background:var(--okbg);box-shadow:inset 3px 0 0 #16a34a}tr.sep td{opacity:.55}tr.ok td:nth-child(3){font-weight:700;color:#4ade80}.okc b{color:#4ade80}td select:disabled{opacity:.6}
+tr.res td{background:#7f1d1d!important;box-shadow:inset 3px 0 0 #ef4444;color:#fecaca}tr.res td:nth-child(3){color:#fecaca;font-weight:700}
+summary{cursor:pointer;color:var(--ac)}
+.pr{display:none}
+@media print{header,nav,.np{display:none!important}.pr{display:block}body{background:#fff;color:#000}.box{border:0;box-shadow:none;background:#fff}.box h2{color:#000}th,td{border:1px solid #999;color:#000}th{color:#000}tr.ok td{background:#dcfce7!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}tr.res td{background:#fecaca!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
+<nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main>
+<script>
+const DATA=[
+[1,"Fu, Wysly, Tiu","Manager","GM","Male","CO MGT","","2023-05-02","Regular"],
+[4,"Buara, Mary Jul, Bechayda","Interpreter/Cook","Admin/Kitchen","Female","CO","September 30, 2026","2023-06-16","Regular"],
+[6,"Opider, Judith, Weling","Warehouse Staff","PAD / Warehouse","Female","PAD","July 16, 2026","2023-08-01","Regular"],
+[7,"Portillano, Louella, Gardoce","Supervisor","Human Resources","Female","CO MGT","July 16, 2026","2023-08-07","Regular"],
+[8,"Javier, Rubylyn, Aspuria","Secretary","PUS/PMC Office","Female","PUS","","2023-08-08","Regular"],
+[16,"Salvador, Richiel, Salvago","Supervisor","PUS/Polishing","Female","CO MGT","","2023-09-01","Regular"],
+[17,"Diones, Princess Andrea, Herrera","Section Leader","PUS/Packing","Female","PUS","April 30, 2026","2023-09-01","Regular"],
+[25,"Angue, Maricel, De Mesa","Manager","Quality","Female","CO MGT","July 16, 2026","2023-09-07","Regular"],
+[33,"Villanueva, Kimberly, Dragon","Section Leader","PUS/Polishing","Female","PUS","April 30, 2026","2023-09-23","Regular"],
+[34,"Bocalan, Nica, Gulame","Section Leader","Temple","Female","PUS","July 16, 2026","2023-09-23","Regular"],
+[40,"Luna, Julie Ann, Castillo","Supervisor","Quality Control / US","Female","CO MGT","","2023-10-09","Regular"],
+[44,"Paraguas, Hapie, Ravelo","Company Driver","Admin","Male","CO","","2023-10-22","Regular"],
+[48,"Panitan, Eugenio Jr., Ortaleza","Manager","Audit/Compliance","Male","CO MGT","","2023-11-06","Regular"],
+[53,"Sabordo, Princess, Samonte","QC Leader","Quality Control /AD","Female","CO","September 30, 2026","2023-11-08","Regular"],
+[66,"Toledo, Lorelyn, Guyagon","Production Operator","PUS/Temple","Female","PUS","April 30, 2026","2023-11-16","Regular"],
+[70,"Olaer, Jane, Catahan","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2023-11-16","Regular"],
+[80,"Montiron, Vivian, Argawanon","Section Leader","PUS/Packing","Female","PUS","","2023-11-16","Regular"],
+[93,"Latigay, Jessabel, Signo","Production Operator","PUS/Polishing","Female","PUS","May 21, 2026","2023-11-16","Regular"],
+[95,"Bernales, Lealyn, Suplag","Section Leader","PUS/Temple","Female","PUS","April 30, 2026","2023-11-16","Regular"],
+[98,"Atienza, Queen Jira, De Lara","Production Operator","PUS/Packing","Female","PUS","","2023-11-16","Regular"],
+[99,"Eridao, Elsa, Aguilar","Sub Section Leader","PUS/Packing","Female","PUS","April 30, 2026","2023-11-16","Regular"],
+[107,"Delas Alas, Glevin John, Sales","IT Specialist","Admin/ IT","Male","CO","October 15, 2026","2024-01-15","Regular"],
+[115,"Perilla, Mia Sherlyn, Fernandez","Production Operator","PUS/Packing","Female","PUS","","2024-03-01","Regular"],
+[120,"Dalura, Jenelyn, Tabalanza","QC Staff/Inspector","Quality Control / US","Female","CO","","2024-03-05","Regular"],
+[123,"Avena, Lucell, Ilagan","PMC Staff","PUS/PMC Office","Female","PUS","June 18, 2026","2024-03-11","Regular"],
+[129,"Dollete, Maricel, Cangas","Kitchen Helper","Admin/Kitchen","Female","CO","","2024-03-12","Regular"],
+[131,"Nuylan, Christian Jess, Pedronan","Design Staff","Design","Male","CO","May 21, 2026","2024-03-25","Regular"],
+[134,"Basubas, Aimond Renz, Melana","Design Staff","Design","Male","CO","October 15, 2026","2024-04-01","Regular"],
+[139,"Cabida, Rose Ann Mae, Cenizal","Production Operator","PMG","Female","PMG","","2024-04-04","Regular"],
+[142,"Gonzales, Nelia, Gallarde","Section Leader","PAD/Packing","Female","PAD","","2024-04-04","Regular"],
+[151,"Herrera, Catherine Joy, Valdez","Production Operator","PAD/Semi Finished","Female","PAD","September 30, 2026","2024-04-12","Regular"],
+[152,"Marquez, Rosecelyn, Capati","Section Leader","PAD/Semi Finished","Female","PAD","","2024-04-12","Regular"],
+[158,"Salud, Merigin, Poso","Production Operator","PAD/Spray Paint","Female","PAD","","2024-04-12","Regular"],
+[160,"Souribio, Cherry Jean, Sumatra","Production Operator","PMG","Female","PMG","","2024-04-12","Regular"],
+[166,"Sabugo, Evelyn, Torejas","Interpreter","PAD/Spray Paint","Female","PAD","","2024-04-16","Regular"],
+[168,"Plagata, Jonalyn, Cañete","QC Staff/Inspector","Quality Control /AD","Female","CO","July 16, 2026","2024-04-16","Regular"],
+[172,"Alberto, Michelle, Pagara","Production Staff/Section Leader","PUS/PMC Office","Female","PUS","October 27, 2026","2024-04-22","Regular"],
+[179,"Pelipas, Elvie, Sistona","Production Operator","PAD/Semi Finished","Female","PAD","","2024-04-26","Regular"],
+[182,"Monforte, Trixie, Balagosa","QMS Staff","Audit/Compliance","Female","CO","October 27, 2026","2024-04-29","Regular"],
+[192,"Sison, Gerardo, Valmonte","Section Leader","PAD/Lens Insertion","Male","PAD","","2024-05-02","Regular"],
+[203,"Valiente, Joann, Coria","QC Staff/ Interpreter","Quality Control / US","Female","CO","","2024-05-10","Regular"],
+[210,"Cerrero, Katreena Marie, Macuja","Supervisor","Audit/Compliance","Female","CO MGT","","2024-05-16","Regular"],
+[213,"De Guzman, Carolyn, Merez","Manager","Sales","Female","CO MGT","","2024-06-03","Regular"],
+[215,"Cecilia, Jessa, Bueno","Production Operator","PUS/Hinge","Female","PUS","May 21, 2026","2024-06-06","Regular"],
+[216,"Flores, Angel Anne, Villacruel","Production Operator","PUS/Polishing","Female","PUS","April 30, 2026","2024-06-06","Regular"],
+[217,"Rama, Lea, ","Production Operator","PUS/Hinge","Female","PUS","","2024-06-08","Regular"],
+[218,"Dones, John Michael, Lagrimas","Sub Section Leader","PUS/Tumbling","Male","PUS","","2024-06-08","Regular"],
+[242,"Amistad, Benjamin, ","Cleaner","Admin","Male","CO","September 30, 2026","2024-07-22","Regular"],
+[245,"Layco, Jericho, Laboriante","Production Operator","PAD/Spray Paint","Male","PAD","","2024-07-22","Regular"],
+[249,"Gamboa, Laarni, Adiz","Supervisor","PAD/PMC Office","Female","CO MGT","","2024-07-29","Regular"],
+[258,"Costez, Arlene, Pabillo","Interpreter","Quality Control / US","Female","CO","","2024-09-02","Regular"],
+[260,"Rabanes, Jeremiah, Ocampo","Production Operator","PUS/Packing","Female","PUS","","2024-09-02","Regular"],
+[269,"Tubid, Archimedes, Valera","Supervisor","Design","Male","CO MGT","June 18, 2026","2024-10-07","Regular"],
+[280,"Lubigan, Arcielyn, Esteybar","PMC Staff","Quality Control / US","Female","CO","","2024-10-21","Regular"],
+[282,"Brillo, John Mark, Baclayo","Production Operator","PUS/Temple","Male","PUS","June 18, 2026","2024-10-21","Regular"],
+[283,"Madelo, Jacklyn, Baguhin","QC Staff/Inspector","Quality Control / US","Female","CO","","2024-10-22","Regular"],
+[290,"Juntura, Jerencio Jr., Dator","Maintenance Staff","Admin/Maintenance","Male","CO","September 30, 2026","2024-11-02","Regular"],
+[293,"Nerona, Hannah Thea, Tabbu","Sub Section Leader","PUS/CNC","Female","PUS","April 30, 2026","2024-11-07","Regular"],
+[295,"Astor, Aloha Rose, Gemoro","Section Leader","PAD/Printing","Female","PAD","","2024-11-08","Regular"],
+[299,"Lizardo, Rochelle, Madera","Section Leader","PAD/Packing","Female","PMG","April 30, 2026","2024-11-08","Regular"],
+[307,"Mendoza, Gracesita, Voluntad","Interpreter","PMG","Female","PMG","","2024-11-11","Regular"],
+[312,"Gualberto, Trisha Jean, Arandia","Production Staff","PUS/PMC Office","Female","PUS","June 18, 2026","2024-11-11","Regular"],
+[313,"Alluvida, Joy Ann, Pacoma","Production Operator","PAD/Semi Finished","Female","PAD","","2024-11-13","Regular"],
+[314,"Ocsan, Irene, Vallido","Interpreter","PUS/PMC Office","Female","PUS","","2024-11-14","Regular"],
+[317,"Buenaflor, Mary Joy, Barbosa","Production Operator","PAD/Screwing","Female","PAD","","2024-11-25","Regular"],
+[319,"Quitiquit, Jhyryll Jane, Notario","Sub Section Leader","PUS/PMC Office","Female","PUS","May 21, 2026","2024-11-25","Regular"],
+[325,"Orperia, Ronalyn, Sanchez","Line Leader","PWR","Female","PWR","May 21, 2026","2024-12-02","Regular"],
+[327,"Tuba, Maryl, Salas","Production Operator","PWR","Female","PWR","May 21, 2026","2024-12-02","Regular"],
+[331,"Maniulit, Loyd, Ronquillo","Company Nurse","Human Resources","Male","CO","April 30, 2026","2024-12-09","Regular"],
+[332,"Belmonte, Rosalie, Bejera","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2024-12-09","Regular"],
+[334,"Castillano, Mary Joy, Torero","PMC Staff","Quality Control / US","Female","CO","","2024-12-09","Regular"],
+[335,"Constante, Norvin, Espadilla","Production Operator","PUS/Hinge","Male","PUS","","2024-12-09","Regular"],
+[338,"Petalco, Jenny Rose, Catapang","Production Operator","PUS/Hinge","Female","PUS","","2024-12-09","Regular"],
+[344,"Diaz, Emelee Joy, Villaruz","Supervisor","PUS/PMC Office","Female","CO MGT","","2024-12-16","Regular"],
+[345,"Saurane, Janesa, Alcantara","Production Operator","PUS/Polishing","Female","PUS","","2024-12-16","Regular"],
+[347,"Ligoro, Desiree- Ann, Arradaza","Sewer","PWR","Female","PWR","","2024-12-18","Regular"],
+[348,"Cadano, Mary Jane, Ayso","Sewer","PWR","Female","PWR","","2024-12-19","Regular"],
+[350,"Casaljay, Lanie, Alvetie","Sub Section Leader","PUS/Packing","Female","PUS","April 30, 2026","2025-01-08","Regular"],
+[351,"Bandayrel, Violeta Lydia, Costales","Sewer","PWR","Female","PWR","","2025-01-13","Regular"],
+[354,"Armocillo, Ulanie, Dumdum","Sewer","PWR","Female","PWR","","2025-01-21","Regular"],
+[355,"Viray, Jenshen, ","QC  Leader","Quality Control / US","Female","CO","","2025-01-22","Regular"],
+[356,"Sadie, Ruby Lovely, Jolbitado","QC Staff/Inspector","Quality Control /AD","Female","CO","","2025-02-03","Regular"],
+[360,"Nolla, Jessabel, Salvo","QC  Leader","Quality Control / US","Female","CO","","2025-02-21","Regular"],
+[364,"Paez, Myra Cel, Peñaredondo","Production Operator","PUS/Polishing","Female","PUS","","2025-02-21","Regular"],
+[365,"Oro, Shamie, Lentija","Production Operator","PUS/Polishing","Female","PUS","","2025-02-21","Regular"],
+[366,"De Luna, Angel, Manuba","Production Operator","PWR","Female","PWR","","2025-02-24","Regular"],
+[370,"Campos, Kemberly Rondolo, Arendon","Production Operator","PUS/Polishing","Female","PUS","","2025-03-01","Regular"],
+[371,"Cabrera, Neneth, Villarojo","Production Operator","PUS/Hinge","Female","PUS","","2025-03-01","Regular"],
+[372,"Cordoya, Rowena, Mullet","Production Operator","PUS/Packing","Female","PUS","","2025-03-01","Regular"],
+[374,"Lumayaga, Cristine, Nez","Production Operator","PUS/Hinge","Female","PUS","","2025-03-01","Regular"],
+[376,"Tamagos, Diana, Gonzales","Production Operator","PUS/Polishing","Female","PUS","","2025-03-01","Regular"],
+[377,"Namuag,  Rachel, Macadat","Sales Coordinator","Sales","Female","CO","July 16, 2026","2025-03-03","Regular"],
+[384,"Bitago, Alfredo Jr., Balana","Molding Injection Operator","PAD/Molding Injection","Male","PAD","","2025-03-17","Regular"],
+[385,"Arbis, Marisol, Alipio","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-03-24","Regular"],
+[386,"Balod, Mary Jane, Cuntapay","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-03-24","Regular"],
+[387,"Francisco, Jimuel, Sapalaran","Production Operator","PUS/Tumbling","Male","PUS","","2025-03-24","Regular"],
+[388,"Reyes, Marijoe, Santalises","QC Clerk","Quality Control/AD","Female","CO","April 30, 2026","2025-03-26","Regular"],
+[390,"Alojado, Kimberly, Dela Cruz","Production Operator","PUS/Temple","Female","PUS","July 16, 2026","2025-04-21","Regular"],
+[391,"Arciga, Allay Jay, ","Production Operator","PUS/Packing","Male","PUS","April 30, 2026","2025-04-21","Regular"],
+[393,"Cabebe, Joyce, Hernaiz","Production Operator","PUS/Packing","Female","PUS","September 30, 2026","2025-04-21","Regular"],
+[395,"Delima, Mae Joy, Lucreda","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-04-21","Regular"],
+[396,"Doneza, Cherrie, Plomos","Production Operator","PUS/Packing","Female","PUS","","2025-04-21","Regular"],
+[400,"Vidal, Elisa, Espiritu","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-04-21","Regular"],
+[401,"Pugna, May Lyn, Daquel","Interpreter","PWR","Female","PWR","","2025-04-21","Regular"],
+[403,"Aguilar, Garbie Joy, Olasiman","PO Specialist","Quality Control / US","Female","CO","September 30, 2026","2025-04-28","Regular"],
+[404,"Arica, April, Ramos","QC Staff/Inspector","Quality Control / US","Female","CO","","2025-04-28","Regular"],
+[408,"Liwag, Pearly Rosiel, De Gala","Interpreter","Quality Control /AD","Female","CO","July 16, 2026","2025-04-28","Regular"],
+[414,"Micmic, Angela Mae, Pornela","Sr. Sales Coordinator","Sales","Female","CO","July 16, 2026","2025-05-12","Regular"],
+[418,"Cagampan, Jhonnalyn, Arapoc","Production Operator","PUS/CNC","Female","PUS","May 21, 2026","2025-05-13","Regular"],
+[420,"Arguelles, Vienna, Lucero","Production Operator","PWR","Female","PWR","","2025-05-14","Regular"],
+[421,"Bautista, Desiree, Abarra","Warehouse Staff","PWR","Female","PWR","May 21, 2026","2025-05-14","Regular"],
+[424,"Pamplona, John Christopher, Solomon","Production Operator","PWR","Male","PWR","","2025-05-14","Regular"],
+[426,"Carmelotes, Jacquelyn, Lastimoso","Production Operator","PWR","Female","PWR","May 21, 2026","2025-05-15","Regular"],
+[429,"Plagata, Bobby Amar, Cañete","Production Operator","PWR","Male","PWR","","2025-05-15","Regular"],
+[430,"Sarmiento, Charina Shane, Cenizal","Production Operator","PWR","Female","PWR","","2025-05-15","Regular"],
+[431,"Plagata, Marvin, Cañete","Production Operator","PMG","Male","PMG","","2025-05-15","Regular"],
+[433,"Umpad, Elenor, Canales","Production Operator","PAD/Spray Paint","Female","PAD","","2025-05-19","Regular"],
+[435,"Dungca, Fenny Elish, Labe","Production Operator","PUS/CNC","Female","PUS","April 30, 2026","2025-05-19","Regular"],
+[436,"Villa, Sherly , Del mundo","Production Operator","PUS/Temple","Female","PUS","July 16, 2026","2025-05-19","Regular"],
+[441,"Durian, Renalyn, Acoba","Production Operator","PUS/Packing","Female","PUS","","2025-05-22","Regular"],
+[442,"Baldove, Catherine , Cadigoy","Production Operator","PAD/Semi Finished","Female","PAD","","2025-05-22","Regular"],
+[444,"Baula, Amy, Camputon","Production Operator","PAD/Packing","Female","PAD","","2025-05-22","Regular"],
+[449,"Deluso, Eden, Raule","Production Operator","PAD/Spray Paint","Female","PAD","","2025-05-22","Regular"],
+[455,"Langgao, Mariel, Corminal","Production Operator","PUS/Packing","Female","PUS","","2025-05-26","Regular"],
+[456,"Abuhat, Norabel, Gaurana","Production Operator","PUS/Packing","Female","PUS","","2025-05-28","Regular"],
+[461,"Cachila, Jamaica Jea , Saut","Production Operator","PUS/Packing","Female","PUS","May 21, 2026","2025-06-02","Regular"],
+[462,"Incapas, Rica May , Reyes","Section Leader","PAD/Semi Finished","Female","PAD","","2025-06-02","Regular"],
+[464,"Vasquez, Meriah Eunice, Ambulo","Production Operator","PAD/ Support Section","Female","PAD","","2025-06-09","Regular"],
+[465,"Balacaña, Joyce Marjorie, Atienza","Production Clerk","PAD/PMC Office","Female","PAD","","2025-06-09","Regular"],
+[468,"Colinares, Geronimo Jr., Ciocson","Design Staff","Design","Male","CO","June 25, 2026","2025-06-09","Regular"],
+[469,"Ilano, Paulo Joshua, Abrencillo","Maintenance Staff","Admin","Male","CO","","2025-06-09","Regular"],
+[473,"Casingca, Jessa Mae, Parami","Production Operator","PWR","Female","PWR","","2025-06-13","Regular"],
+[474,"Hernandez, Elena, Titan","Production Operator","PWR","Female","PWR","","2025-06-13","Regular"],
+[475,"Delos Reyes, Maria Criziena, Brinoza","QC Staff","Quality Control/ US","Female","CO","","2025-06-14","Regular"],
+[478,"Aniñon, Angheleto, Celada","Production Operator","PAD/Packing","Male","PAD","","2025-06-16","Regular"],
+[481,"Del Rosario, Koby, Dupo","Production Operator","PAD/Spray Paint","Male","PAD","June 18, 2026","2025-06-16","Regular"],
+[487,"Madeja, Joy Nicole, Ogale","Executive Assistant","Admin","Female","CO","","2025-06-20","Regular"],
+[488,"Baguan, Clarissa, Calvadores","Production Operator","PAD/ Support Section","Female","PAD","","2025-06-20","Regular"],
+[490,"Cereza, Ronelyn, Detchos","Production Operator","PUS/Temple","Female","PUS","May 21, 2026","2025-06-20","Regular"],
+[492,"Infante, Jessica, Gerale","Sub Section Leader","PUS/Packing","Female","PUS","May 21, 2026","2025-06-20","Regular"],
+[493,"Perido, Jonas, ","Production Operator","PUS/Packing","Male","PUS","April 30, 2026","2025-06-20","Regular"],
+[500,"Zamoras, Jenzil, Atibagos","Production Assistant","PUS/PMC Office","Female","PUS","May 21, 2026","2025-06-27","Regular"],
+[502,"Acedera, Ma. Hazel, ","Production Operator","PAD/Semi Finished","Female","PAD","","2025-06-27","Regular"],
+[503,"Malicsi, Maria Alisa, Barrameda","Production Operator","PAD/Semi Finished","Female","PAD","","2025-06-27","Regular"],
+[505,"Ontañez, Rosemarie, Dipon","Production Operator","PAD/Packing","Female","PAD","","2025-06-27","Regular"],
+[528,"Jimenez, James Christian, Abiera","Design Staff","Design","Male","CO","June 18, 2026","2025-07-11","Regular"],
+[530,"Leona, Aubrey , Lumbang","Manager","OM","Female","CO MGT","","2025-07-17","Regular"],
+[535,"Doria, Marvelous, Gabriel","Production Operator","PAD/Packing","Female","PAD","","2025-07-21","Regular"],
+[538,"Nasroden, Saimah , Antal","Production Operator","PAD/Spray Paint","Female","PAD","July 16, 2026","2025-07-21","Regular"],
+[539,"Palmes, Ronalyn, Soreño","Production Operator","PMG","Female","PMG","","2025-07-22","Regular"],
+[533,"Cantor, Marites, Reyes","Production Operator","PAD/Packing","Female","PAD","","2025-07-26","Regular"],
+[541,"Dumasapal, Joana, Garcia","Production Operator","PUS/Temple","Female","PUS","April 30, 2026","2025-07-26","Regular"],
+[542,"Jordan, Jacqueline, Marcial","Production Operator","PUS/ Packing","Female","PUS","","2025-07-26","Regular"],
+[543,"Rosales, Airene, Paz","Production Operator","PUS/Temple","Female","PUS","June 18, 2026","2025-07-26","Regular"],
+[544,"Real, Jose John, Lerio","Production Operator","PUS/Tumbling","Male","PUS","","2025-07-26","Regular"],
+[545,"Servan, Franze Ivan, Lopez","Production Operator","PUS/ CNC","Male","PUS","May 21, 2026","2025-07-26","Regular"],
+[547,"Peleo, Melanie, Avejero","Production Operator","PUS/Temple","Female","PUS","June 25, 2026","2025-07-26","Regular"],
+[548,"Manipon, Narizza, Argueza","Production Operator","PUS/ Packing","Female","PUS","","2025-07-26","Regular"],
+[552,"Gigando, John Paul, Andoy","Supervisor","Sales","Male","CO MGT","June 18, 2026","2025-08-01","Regular"],
+[553,"Gunio, Margielyn, Bangga","Supervisor","Admin","Female","CO MGT","June 18, 2026","2025-08-01","Regular"],
+[555,"Asunio, Arcellyne, ","Production Operator","PAD/Packing","Female","PAD","","2025-08-02","Regular"],
+[557,"Bakiao, Jonalyn, Sales","Production Operator","PAD/Packing","Female","PAD","","2025-08-02","Regular"],
+[558,"Garcia, Camila, De Gala","QC Clerk","Quality Control/AD","Female","CO","April 30, 2026","2025-08-02","Regular"],
+[560,"Macatangay, Miriam, Balbacal","Production Operator","PAD/Packing","Female","PAD","","2025-08-02","Regular"],
+[561,"Mahilum, Mariel, Breboneria","Production Operator","Spraypaint","Female","PAD","October 15, 2026","2025-08-02","Regular"],
+[564,"Aguila, Robelyn, Bayrante","Production Operator","PUS/ Packing","Female","PUS","June 25, 2026","2025-08-02","Regular"],
+[567,"Comel, Donalin, Bautista","Interpreter","PUS/PMC Office","Female","PUS","","2025-08-02","Regular"],
+[573,"Cabuhat, Monaliza, Sarmiento","Production Operator","PWR","Female","PWR","April 30, 2026","2025-08-04","Regular"],
+[574,"Cadag, Eljoy, Paredes","Production Operator","PWR","Female","PWR","","2025-08-04","Regular"],
+[576,"Dalayap, Rosenell, Calingasan","Production Operator","PWR","Female","PWR","April 30, 2026","2025-08-04","Regular"],
+[577,"Gonzaga, Arlibeth, Dapin","Production Operator","PWR","Female","PWR","","2025-08-04","Regular"],
+[585,"Oliva, Arnie, Pabelonia","Production Operator","PAD/Packing","Female","PAD","","2025-08-09","Regular"],
+[586,"Tacuda, Gretchen,  Sabato","Production Operator","PAD/Screwing","Female","PAD","","2025-08-09","Regular"],
+[594,"Bola, Ella, Francia","Production Operator","PUS/ Packing","Female","PUS","","2025-08-16","Regular"],
+[595,"Cueva, Charline Jean, Parpan","Production Operator","PUS/ Packing","Female","PUS","June 18, 2026","2025-08-16","Regular"],
+[600,"Fontanilla, Criselda, Talinting","Production Operator","PUS/ Packing","Female","PUS","","2025-08-16","Regular"],
+[602,"Mejia, Diana Rose, Fernandez","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-08-16","Regular"],
+[605,"Tapia, Shamemara, Gernale","Production Operator","PUS/ Packing","Female","PUS","","2025-08-16","Regular"],
+[607,"Dinopol, Romelyn , Bation","Production Operator","PAD/Packing","Female","PAD","","2025-08-16","Regular"],
+[879,"Apostol, Kathleen, Cruz","QAQC Clerk","Quality Control/AD","Female","CO","April 30, 2026","2025-10-04","Regular"],
+[613,"Fernandez, Aira Fe, Tinamisan","QC Staff/ Inspector","Quality Control/ AD","Female","CO","","2025-08-16","Regular"],
+[615,"Juarez, Melquecedic, Madrigal","Design Staff","Design ","Male","CO","July 16, 2026","2025-08-16","Regular"],
+[618,"Guintab, Janine, Soria","QAQC Liason","Quality Control/ US","Female","CO","","2025-08-16","Regular"],
+[620,"Escalante, Angelica, Aguilar","Manager","Sales","Female","CO MGT","","2025-08-16","Regular"],
+[623,"Antawag, Jessa Mae, Binigay","Production Operator","PAD/Printing","Female","PAD","","2025-08-23","Regular"],
+[625,"Gualba, Rica, Layong","Production Operator","PAD/Semi Finished","Female","PAD","","2025-08-23","Regular"],
+[630,"Alcedo, Bianca Mae Cassandra, Ligan","Production Operator","PWR","Female","PWR","","2025-08-23","Regular"],
+[632,"Arbis, Riechel, Bocar","Production Operator","PWR","Female","PWR","May 21, 2026","2025-08-23","Regular"],
+[634,"Benesen, Diana Mae, Gonzales","Production Operator","PWR","Female","PWR","","2025-08-23","Regular"],
+[635,"Caayon, Marie Pe, Sabeniano","Production Operator","PWR","Female","PWR","May 21, 2026","2025-08-23","Regular"],
+[636,"Carballo, Trisha Mae, Casa","Production Operator","PWR","Female","PWR","","2025-08-23","Regular"],
+[642,"Sarmiento, Mary Bless, Silay","Production Operator","PWR","Female","PWR","","2025-08-23","Regular"],
+[646,"Noveno, Diomelyn, Albopera","Production Operator","PUS/ Packing","Female","PUS","","2025-08-23","Regular"],
+[649,"Blanco , Jhona, Obbus","Production Operator","PUS/ Packing","Female","PUS","","2025-08-23","Regular"],
+[651,"Dacop, Marvin, Perlas","Production Operator","PUS/Tumbling","Male","PUS","","2025-08-23","Regular"],
+[655,"Laynesa, Joan, Vejeras","Production Operator","PUS/ Packing","Female","PUS","","2025-08-23","Regular"],
+[657,"Montilla, Ma. Jenny, Biabor","Production Operator","PUS/ Packing","Female","PUS","","2025-08-23","Regular"],
+[661,"Tañagras, Ronalyn, Acosta","Production Operator","PUS/ Packing","Female","PUS","","2025-08-23","Regular"],
+[643,"Villamor, Armaliza, Fabiliar","Production Operator","PWR","Female","PWR","","2025-08-23","Regular"],
+[670,"Calingasan, Maricris, Ilao","Production Operator","PMG","Female","PMG","","2025-08-28","Regular"],
+[678,"Golong, Rhea Mae, Seludo","Production Operator","PMG","Female","PMG","","2025-08-28","Regular"],
+[682,"Lorican, Leonilyn, Manfredo","Section Leader","PAD/Semi Finished","Female","PAD","","2025-08-28","Regular"],
+[687,"Profeta, Andrew, Ejansantos","Production Operator","PAD/Spray Paint","Male","PAD","May 21, 2026","2025-08-28","Regular"],
+[685,"Parayno, Julie Ann, Bocalan","Production Operator","PAD/Spray Paint","Female","PMG","June 18, 2026","2025-08-28","Regular"],
+[690,"Rivera, Justin, Eridao","Production Operator","PAD/Spray Paint","Male","PAD","October 15, 2026","2025-08-28","Regular"],
+[697,"Baga-an, Lelit, Deguil","Production Operator","PWR","Female","PWR","","2025-08-28","Regular"],
+[700,"Mandado, Grecel, Esperos","Production Operator","PWR","Female","PWR","April 30, 2026","2025-08-28","Regular"],
+[701,"Martinez, Eunice, Lomugdang","Production Operator","PWR","Female","PWR","June 18, 2026","2025-08-28","Regular"],
+[702,"Montesino, Analy, Cirujales","Production Operator","PWR","Female","PWR","","2025-08-28","Regular"],
+[708,"Romen, Paulene Joy, Aniover","Production Operator","PWR","Female","PWR","May 21, 2026","2025-08-28","Regular"],
+[666,"Abordo, Ma. April, Tercio","Production Operator","PAD/Screwing","Female","PAD","","2025-08-30","Regular"],
+[714,"Absalon, Salem, Garcia","Production Operator","PUS/ Packing","Female","PUS","September 30, 2026","2025-08-28","Regular"],
+[713,"Alegria, Noralyn, Lihaylihay","Production Operator","         ","Female","PUS","October 27, 2026","2025-08-28","Regular"],
+[712,"Anten, John Rowell, Balarido","Production Operator","PUS/Packing","Male","PUS","April 30, 2026","2025-08-28","Regular"],
+[719,"Cano, Edgar, Masucol","Production Operator","PUS/ Packing","Male","PUS","June 25, 2026","2025-08-28","Regular"],
+[721,"Cruz, Charmie, Dimapilis","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-08-28","Regular"],
+[727,"Garcia, Lianna Joy, Bigalbal","Production Operator","PUS/ Packing","Female","PUS","","2025-08-28","Regular"],
+[729,"Magana, Maybelle Anne, Terelios","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-08-28","Regular"],
+[731,"Marcelo, Mark Renee, Silvestre","Production Operator","PUS/ Packing","Male","PUS","June 18, 2026","2025-08-28","Regular"],
+[730,"Martinez, Jeperson, Vargas","Sub Section Leader","PUS/Packing","Male","PUS","April 30, 2026","2025-08-28","Regular"],
+[737,"Trinidad, D.Jay, Osinlay","Production Operator","PUS/ Packing","Male","PUS","May 21, 2026","2025-08-28","Regular"],
+[722,"Delgaco, Maria Luisa, Tampuco","Production Staff","PUS/PMC Office","Female","PUS","","2025-08-28","Regular"],
+[676,"Esteybar, Ronnel, De Ocampo","Production Operator","PAD/Lens Insertion","Male","PAD","","2025-08-30","Regular"],
+[742,"Bautista, Aileen, Onoya","Production Operator","PAD/Packing","Female","PAD","","2025-08-30","Regular"],
+[743,"Bobiles, Jane Ashley, Gonzales","Production Operator","PAD/Packing","Female","PMG","April 30, 2026","2025-08-30","Regular"],
+[751,"Balandro, Mina, Latorre","Production Operator","PWR","Female","PWR","","2025-08-30","Regular"],
+[752,"Cabali, Kemverly, Gonzales","Production Operator","PWR","Female","PWR","April 30, 2026","2025-08-30","Regular"],
+[753,"Gueco, Sharmaine Ellery, Villanueva","Production Operator","PWR","Female","PWR","June 18, 2026","2025-08-30","Regular"],
+[759,"Apil, Rona Glen, Sales","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-08-30","Regular"],
+[761,"Atibagos, Noriel, Manguiat","Warehouse Assistant",null,"Male","PUS","June 18, 2026","2025-08-30","Regular"],
+[762,"Bacud, Ciara Mae, Zapico","Production Operator","PUS/ Hinge","Female","PUS","","2025-08-30","Regular"],
+[763,"Beltran, Veronica, ","Production Operator","PUS/ Packing","Female","PUS","","2025-08-30","Regular"],
+[764,"Diones, Rivan, Canlas","Production Operator","PUS/ Packing","Female","PUS","April 30, 2026","2025-08-30","Regular"],
+[766,"Leoncio, Rodalyn, De Guzman","Production Operator","PUS/ Packing","Female","PUS","","2025-08-30","Regular"],
+[770,"Nacino, Darren, Cabales","Production Operator","PUS/ Packing","Male","PUS","","2025-08-30","Regular"],
+[774,"Vendero, Ronnie, Sabio","Warehouse Assistant","PUS/ Packing","Male","PUS","May 21, 2026","2025-08-30","Regular"],
+[776,"Encarnacion, Roselle Irish, Agnes","Production Operator","PUS/Packing","Female","PUS","April 30, 2026","2025-08-30","Regular"],
+[1085,"Cruz, Jenelyn, Lobaton","Production Operator","PUS/ Packing","Female","PUS","October 27, 2026","2025-12-06","Regular"],
+[787,"Cahayon, Schannen Cy, Atte","Production Operator","PAD/Semi Finished","Female","PAD","July 16, 2026","2025-09-06","Regular"],
+[788,"Cruzado, Anavel, Juranes","Production Operator","PAD/Screwing","Female","PAD","","2025-09-06","Regular"],
+[790,"Francisco , Jose, Duan","Production Operator","PAD/Molding Injection","Male","PAD","","2025-09-06","Regular"],
+[792,"Grueso, Candy, ","Production Operator","PAD/Molding Injection","Female","PAD","","2025-09-06","Regular"],
+[796,"Monte, Dirk Vincent, Octa","Production Operator","PAD/Molding Injection","Male","PAD","","2025-09-06","Regular"],
+[797,"Noble, Raencynt, ","Production Operator","PAD/Lens Insertion","Male","PAD","","2025-09-06","Regular"],
+[799,"Punzalan, Ana, Caldemon","Production Operator","PAD/Molding Injection","Female","PAD","","2025-09-06","Regular"],
+[804,"Trapal , Roxanne , Amoroto","Production Operator","PAD/Printing","Female","PAD","","2025-09-06","Regular"],
+[805,"Velsis, Anna Fe, Muñez","Production Operator","PAD/Semi Finished","Female","PAD","","2025-09-06","Regular"],
+[826,"Bongo, Rhealyn, Villareal","Production Operator","PMG","Female","PMG","","2025-09-06","Regular"],
+[807,"Porlaje, Jovelyn, Naz","QA/QC/Inspector","Quality Control/ AD","Female","CO","July 16, 2026","2025-09-06","Regular"],
+[810,"Arevalo, Joan, Calagui","Production Operator","PUS/ Packing","Female","PUS","April 30, 2026","2025-09-06","Regular"],
+[822,"Blanco , Jhona, Fuentes","Production Operator","PUS/ Polishing","Female","PUS","","2025-09-06","Regular"],
+[815,"Castilla, Mark Lawrence, Clemen","Production Operator","PUS/ Polishing","Male","PUS","April 30, 2026","2025-09-06","Regular"],
+[817,"Flores, Jillian, Argente","Production Operator","PUS/ Hinge","Female","PUS","","2025-09-06","Regular"],
+[818,"Fernandez, Eulla, Bruan","Production Operator","PUS/ Packing","Female","PUS","","2025-09-06","Regular"],
+[819,"Lomat, Juliana, Bigalbal","Production Operator","PUS/ Polishing","Female","PUS","","2025-09-06","Regular"],
+[820,"Reonal, Jerald Aaron, Esparcia","Production Operator","PUS/ Polishing","Male","PUS","","2025-09-06","Regular"],
+[843,"Calites, Catherine, Clapis","Production Operator","PAD/Screwing","Female","PAD","","2025-09-13","Regular"],
+[847,"Manaog , Ronalyn, ","Production Operator","PAD/Spray Paint","Female","PAD","","2025-09-13","Regular"],
+[849,"Peña, Jhasper Lee, Herrera","Production Operator","PAD/Lens Insertion","male","PAD","","2025-09-13","Regular"],
+[850,"Perez, Monica Mae, Doroliat","Production Operator","PAD/ Warehouse","Female","PAD","June 25, 2026","2025-09-13","Regular"],
+[851,"Pinca, Shiela, ","Production Operator","PMG","Female","PMG","","2025-09-13","Regular"],
+[853,"Portillano, Ana Michaella, Magdali","Production Operator","PAD/Assembly","Female","PAD","","2025-09-13","Regular"],
+[855,"Saplad, Margie, Baguisa","Production Operator","PAD/Packing","Female","PAD","","2025-09-13","Regular"],
+[836,"Cueco, May, Catibayan","Production Operator","PUS/ Packing","Female","PUS","September 30, 2026","2025-09-13","Regular"],
+[859,"De Guzman , Jozelle Lyca, Gaton","QAQC Staff/Inspector","Quality Control / US","Female","CO","","2025-09-13","Regular"],
+[860,"Flores, Jessica, ","QAQC Staff/Inspector","Quality Control / US","Female","CO","","2025-09-13","Regular"],
+[869,"Boringot, Jeffrey, Broso","QMS Engineer","Audit/Compliance","Male","CO","July 16, 2026","2025-09-16","Regular"],
+[848,"Mojica , Ronna, Amandy","Production Operator","PAD/Packing","Female","PAD","","2025-09-20","Regular"],
+[872,"Firme, Rafael, Apolona","Maintenance Staff","Admin","Male","CO","April 30, 2026","2025-09-20","Regular"],
+[844,"Contridas, Rona Mae, Ebol","Production Operator","PAD/Semi Finished","Female","PAD","October 15, 2026","2025-09-21","Regular"],
+[873,"Adrid, Katrina Eunice, Herrera","Impex Staff","Impex","Female","CO","June 18, 2026","2025-09-22","Regular"],
+[876,"Cubillas, Aiza, ","Secretary","Design","Female","CO","June 18, 2026","2025-09-27","Regular"],
+[877,"Ytang, Joenilmar, Patlingrao","PMC Staff","Quality Control / US","Male","CO","","2025-10-04","Regular"],
+[1558,"Dela Cruz, Beverlyn, Acosta","Sewer","PWR","Female","PWR","","2026-06-01","Probationary"],
+[884,"Garcia, Goner, Tura","Production Operator","PWR","Male","PWR","April 30, 2026","2025-10-04","Regular"],
+[886,"Madelo, Jecelo, Baguhin","Production Operator","PWR","Male","PWR","","2025-10-04","Regular"],
+[891,"Acquisa, Maribel, Sevilla","Supervisor","IMPEX","Female","CO MGT","","2025-10-09","Regular"],
+[900,"Osorio, Justine, Hernandez","QCStaff/Inspector","Quality Control/ US","Female","CO","","2025-10-24","Regular"],
+[908,"Papica, Jose Ariel, Qui","Production Operator","PAD/Spray Paint","Male","PAD","","2025-11-03","Regular"],
+[910,"Artiaga, Aubrey Rose, Molina","Production Operator","PWR","Female","PWR","","2025-11-03","Regular"],
+[911,"Bernas, Rosie, Bayos","Production Operator","PWR","Female","PWR","October 27, 2026","2025-11-03","Regular"],
+[914,"Castillo, Lance Edcel, Benjamin","Production Operator","PWR","Male","PWR","April 30, 2026","2025-11-03","Regular"],
+[916,"Cipriaso, Alma, Anadilla","Production Operator","PWR","Female","PWR","June 18, 2026","2025-11-03","Regular"],
+[921,"Espineli, Niña, Rebater","Production Operator","PWR","Female","PWR","","2025-11-03","Regular"],
+[923,"Garduque, Maricel , Simba","Production Operator","PWR","Female","PWR","","2025-11-03","Regular"],
+[927,"Opanda, Roselyn, Latagan","Production Operator","PWR","Female","PWR","April 30, 2026","2025-11-03","Regular"],
+[933,"Wata, Janice, Nestal","Production Operator","PWR","Female","PWR","June 25, 2026","2025-11-03","Regular"],
+[935,"Mison SR., Alvin, Daiz","Company Driver","Admin","Male","CO","","2025-11-08","Regular"],
+[945,"Abis, Mike Matthew, Arbues","Production Operator","PAD/Packing","Male","PAD","","2025-11-15","Regular"],
+[951,"Guiling, Janjalani, Hassan","Production Operator","PAD/Packing","Male","PAD","","2025-11-15","Regular"],
+[954,"Pera, Lheajoy, Serrano","Production Operator","PAD/Packing","Female","PAD","","2025-11-15","Regular"],
+[955,"Ragomio, Rowena, Baraganio","Production Operator","PAD/Packing","Female","PMG","October 15, 2026","2025-11-15","Regular"],
+[960,"Arnes, Rachelle, Portez","Production Operator","PWR","Female","PWR","","2025-11-15","Regular"],
+[968,"Republica, Hazel, Sibial","Production Operator","PWR","Female","PWR","June 25, 2026","2025-11-15","Regular"],
+[969,"Torres, Chathy, Taopa","Production Operator","PWR","Female","PWR","June 18, 2026","2025-11-15","Regular"],
+[970,"Servania, Marites, Paragas","Production Operator","PWR","Female","PWR","April 30, 2026","2025-11-15","Regular"],
+[974,"Chua, Jennifer, Chavez","Production Operator","PWR","Female","PWR","June 18, 2026","2025-11-22","Regular"],
+[979,"Arayan, Jennifer, Masendo","Production Operator","PAD/Printing","Female","PAD","June 18, 2026","2025-11-22","Regular"],
+[985,"Inocencio, Diane, Maceda","Production Operator","PAD/Packing","Female","PAD","","2025-11-22","Regular"],
+[1002,"Aves, Roan Rose, Granadel","Production Operator","PUS/ Packing","Female","PUS","","2025-11-29","Regular"],
+[1003,"Balin, Josmar, Amaranto","Material Handler","PUS/PMC Office","Male","PUS","","2025-11-29","Regular"],
+[1004,"Belostrino, Mary Grace, Bustamante","Production Operator","PUS/ Packing","Female","PUS","October 27, 2026","2025-11-29","Regular"],
+[1007,"Bomalay, Jemyrose, Pagundo","Production Operator","PUS/PMC Office","Female","PUS","May 21, 2026","2025-11-29","Regular"],
+[1009,"Bulawan, Pamela, Aungon","Production Operator","PUS/PMC Office","Female","PUS","October 27, 2026","2025-11-29","Regular"],
+[1013,"Consolacion, Angelica, Marzan","Production Operator","PUS/ Packing","Female","PUS","May 21, 2026","2025-11-29","Regular"],
+[1015,"Dela Paz, Rosalee, Riel","Production Operator","PUS/ Polishing","Female","PUS","","2025-11-29","Regular"],
+[1023,"Igdanes, Shiela Mae, Luzong","Production Staff","PUS/PMC Office","Female","PUS","April 30, 2026","2025-11-29","Regular"],
+[1025,"Loveras, Angeline, Regalado","Production Operator","PUS/ Packing","Female","PUS","","2025-11-29","Regular"],
+[1028,"Pardillo, Jessil Mae, Mangyao","Production Operator","PUS/ Packing","Female","PUS","May 21, 2026","2025-11-29","Regular"],
+[1036,"Arididon Jr., Lodino, Gonzaga","Production Operator","PAD/Semi Finished","Male","PAD","","2025-11-29","Regular"],
+[1042,"Denubo, Ronald , Gansayan","Production Operator","PAD/Lens Insertion","Male","PAD","October 27, 2026","2025-11-29","Regular"],
+[1043,"Llego, Jimwel, Ranas","Production Operator","PAD/Lens Insertion","Male","PAD","","2025-11-29","Regular"],
+[1051,"Teves, Renalyn, Estores","Production Operator","PWR","Female","PWR","June 25, 2026","2025-11-29","Regular"],
+[1052,"Cristobal, Daisy, Villocillo","PMC Staff","QA/QC_US","Female","CO","July 16, 2026","2025-11-29","Regular"],
+[1054,"Garcia, Kerrpy Kairenz Tonn, Fojas","Impex Staff","Impex","Male","CO","June 25, 2026","2025-11-29","Regular"],
+[1061,"Layson, Jovy Ian, Rubio","Production Operator","PAD/Spray Paint","Male","PAD","June 25, 2026","2025-12-06","Regular"],
+[1065,"Alejos, Magdalyn, Prudecio","Compliance Staff","Audit/Compliance","Female","CO","September 30, 2026","2025-12-06","Regular"],
+[1066,"Abela, Erene, Saway","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1067,"Antopina, Vicente Jr., Cabarles","Production Operator","PUS/ Packing","Male","PUS","","2025-12-06","Regular"],
+[1068,"Cayadong, Gabby, Abecilla","Production Operator","PUS/ Hinge","Male","PUS","October 15, 2026","2025-12-06","Regular"],
+[1074,"Gautani, Johna, Herrera","Production Operator","PUS/ Packing","Female","PUS","May 21, 2026","2025-12-06","Regular"],
+[1075,"Itok, Joan Faye, Dinglasa","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1076,"Jimenez, Josephine, Marinas","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1078,"Molleno, Ana, Autentica","Production Operator","PUS/ Polishing","Female","PUS","","2025-12-06","Regular"],
+[1079,"Olanga, Jocelyn, Bantilan","Production Operator","PUS/ Packing","Female","PUS","July 16, 2026","2025-12-06","Regular"],
+[1080,"Perez, Jennifer, Marquez","Production Operator","PUS/ Packing","Female","PUS","May 21, 2026","2025-12-06","Regular"],
+[1082,"Armintia, Mikee, Cañete","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1557,"Dela Cruz, Kayce, ","Production Clerk","PWR","Female","PWR","","2026-06-01","Probationary"],
+[1089,"Domingo, Maria Jessica, De Leon","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1090,"Formento, Fe Ann, Pareja","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1091,"Hernandez, Marina, Laydeya","Production Operator","PUS/ Packing","Female","PUS","September 30, 2026","2025-12-06","Regular"],
+[1092,"Inosante, Michelle, Panganiban","Production Operator","PUS/ Packing","Female","PUS","","2025-12-06","Regular"],
+[1098,"San Jose, Daisy, Baraquiel","Production Operator","PUS/ Polishing","Female","PUS","","2025-12-06","Regular"],
+[1099,"Uray, Rosenda, Magno","Production Operator","PUS/ Polishing","Female","PUS","","2025-12-06","Regular"],
+[1105,"Opanda, Rachel, Latagan","Production Operator","PAD/Packing","Female","PAD","","2025-12-13","Regular"],
+[1113,"Arididon, Diana Mhay, Ergino","Production Operator","PWR","Female","PWR","June 18, 2026","2025-12-13","Regular"],
+[1114,"Caballes, Rizalyn, Cabreros","Production Operator","PWR","Female","PWR","June 25, 2026","2025-12-13","Regular"],
+[1115,"Conejos, Ramil, Ortiz","Production Operator","PWR","Male","PWR","","2025-12-13","Regular"],
+[1119,"Gamat, Shane Lila, ","Production Operator","PWR","Female","PWR","","2025-12-13","Regular"],
+[1123,"Madera, Jonil, Ogbinar","Production Operator","PWR","Male","PWR","","2025-12-13","Regular"],
+[1124,"Oropel, Rachelle, Dela Peña","Production Operator","PWR","Female","PWR","June 25, 2026","2025-12-13","Regular"],
+[1125,"Pagaduan, Ruffa, Israel","Production Operator","PWR","Female","PWR","","2025-12-13","Regular"],
+[1143,"Libores, Joey, Estañol","Production Operator","PUS/ Packing","Male","PUS","May 21, 2026","2025-12-19","Regular"],
+[1144,"Nocellado, Jupiter, Malon","Production Operator","PUS/ Packing","Male","PUS","","2025-12-19","Regular"],
+[1145,"Sarmiento, Shella, Tapia","Production Operator","PUS/ Polishing","Female","PUS","May 21, 2026","2025-12-19","Regular"],
+[1148,"Villaluz, Carlito, San Miguel","Production Operator","PUS/ Hinge","Male","PUS","","2025-12-19","Regular"],
+[1149,"Catacutan, May, Villanueva","Manager","Accounting","Female","CO MGT","September 30, 2026","2025-12-26","Regular"],
+[1166,"Bernales, Rose Ann, Opao","Production Operator","PAD/Support Section","Female","PAD","","2026-01-08","Regular"],
+[1167,"Calimosa, Mary Jane, Gaza","Production Operator","PAD/Packing","Female","PAD","","2026-01-08","Regular"],
+[1169,"Cuevas, Frances Ann, Sarceda","Production Operator","PAD/Packing","Female","PAD","","2026-01-08","Regular"],
+[1170,"Del Mundo, Jennifer, Sta Ana","Production Operator","PAD/Packing","Female","PAD","","2026-01-08","Regular"],
+[1176,"Gumale, Angeline, Moldon","Production Operator","PAD/Support Section","Female","PAD","","2026-01-08","Regular"],
+[1179,"Jimenez, Roniel, Baarde","Production Operator","PAD/Packing","Male","PAD","","2026-01-08","Regular"],
+[1188,"Pareja, Jhasmin Meeka, ","Production Operator","PAD/Packing","Female","PAD","","2026-01-08","Regular"],
+[1190,"Pullos, Honey Mae, Jaca","Production Operator","PAD/Spray Paint","Female","PAD","October 15, 2026","2026-01-08","Regular"],
+[1194,"Ruben, Jesiel, Quitayen","Production Operator","PAD/Semi Finished","Female","PAD","","2026-01-08","Regular"],
+[1197,"Santa Ana, Jelyn, Cases","Production Operator","PAD/Assembly","Female","PAD","","2026-01-08","Regular"],
+[1198,"Arenal, Emily, Bernardo","Production Operator","PUS/ Packing","Female","PUS","","2026-01-08","Regular"],
+[1202,"Cataylo, Jasleen, Onsana","Production Staff","PUS/PMC Office","Female","PUS","June 18, 2026","2026-01-08","Regular"],
+[1206,"Gonzales, Clydele Paul, Bocauto","Production Operator","PUS/ Hinge","Female","PUS","","2026-01-08","Regular"],
+[1210,"Millanes, Ellizier, Pareja","Production Operator","PUS/ Packing","Male","PUS","June 25, 2026","2026-01-08","Regular"],
+[1214,"Tizado, Mark, Banga","Production Operator","PUS/ Packing","Male","PUS","July 16, 2026","2026-01-08","Regular"],
+[1218,"Aytona, Nikki, ","Production Operator","PWR","Male","PWR","","2026-01-08","Probationary"],
+[1220,"Baiño, Catherine, Apole","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1225,"Buizon, Ravel, Recardel","Production Operator","PWR","Male","PWR","","2026-01-08","Probationary"],
+[1233,"Cervantes, Floriedel, Parcutilo","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1239,"Esquierdo, Jhonalyn, ","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1244,"Gordo, Joyla, Ramirez","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1247,"Marintes, Leizl, Boton","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1250,"Monter, Margelyn, Pepe","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1251,"Nevado, Jan Mark, Manangan","Production Operator","PWR","Male","PWR","","2026-01-08","Probationary"],
+[1253,"Ortega, Jonalyn, Jaspe","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1255,"Palma, Arjane, Romero","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1257,"Pelayo, Sherryl, Lledo","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1262,"Radan, Melissa, Padis","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1263,"Saflor, Marvin, Riman","Production Operator","PWR","Male","PWR","","2026-01-08","Probationary"],
+[1264,"Sayawan, Syra Joy, Gabatbat","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1267,"Tabianan, Michael, Ventulan","Production Operator","PWR","Male","PWR","","2026-01-08","Probationary"],
+[1270,"Zareno, Mianne, Rita","Production Operator","PWR","Female","PWR","","2026-01-08","Probationary"],
+[1273,"De Vera, Jean, Balondo","QAQC Staff / Inspector US","QAQC_US","Female","CO","","2026-01-08","Regular"],
+[1276,"Mabulay, Rico, Arriesgado","Production Operator","PWR","Male","PWR","","2026-01-10","Probationary"],
+[1277,"Salvador, Nissa, Cuyos","Production Staff","PWR","Female","PWR","October 27, 2026","2026-01-10","Regular"],
+[1284,"Diones, Jasmin, Dela Vida","Accounting Staff","Accounting","Female","CO","May 21, 2026","2026-01-10","Regular"],
+[1294,"Banais, Richelle, Cabiligno","Production Operator","PAD/Packing","Female","PAD","May 21, 2026","2026-01-17","Regular"],
+[1295,"Batoy, Jessa, Jolotba","Production Operator","PAD/Packing","Female","PAD","","2026-01-17","Regular"],
+[1296,"Bautista, Kyla Karylle, Aquino","Production Operator","PAD/Packing","Female","PAD","","2026-01-17","Regular"],
+[1298,"Bocalig, Jerick, Liscabo","Production Operator","PAD/Molding Injection","MALE","PAD","","2026-01-17","Regular"],
+[1300,"Caparas, Anna Ria, Rea","Production Operator","PAD/Packing","Female","PAD","","2026-01-17","Regular"],
+[1301,"De Luna, Merry Grace, Nanuba","Production Operator","PAD/Packing","Female","PAD","","2026-01-17","Regular"],
+[1304,"Erederos, Kenneth, Cachila","Production Operator","PMG","Female","PMG","","2026-01-17","Probationary"],
+[1305,"Esteves, Sean Darwin, Cabanig","Production Operator","PAD/Packing","Female","PAD","","2026-01-17","Regular"],
+[1308,"Lacorda, Arjay, Rabacal","Production Operator","PAD/Packing","MALE","PAD","July 16, 2026","2026-01-17","Regular"],
+[1309,"Lodana, Jomar, Molar","Production Operator","PAD/Lens Insertion","MALE","PAD","","2026-01-17","Regular"],
+[1315,"Tambal, Loida, ","Production Operator","PAD/Support Section","Female","PAD","","2026-01-17","Probationary"],
+[1318,"Villaruz, Debbie, Beato","Production Operator","PAD/Molding Injection","Female","PAD","","2026-01-17","Probationary"],
+[1322,"Asuncion, Jomelyne, ","Production Operator","PMG","Female","PMG","","2026-01-24","Probationary"],
+[1323,"Banalo, Roselyn, Nudalo","Production Operator","PAD/Semi Finished","Female","PAD","","2026-01-24","Probationary"],
+[1324,"Cecilia, Jamela, Bueno","Production Operator","PMG","Female","PMG","","2026-01-24","Probationary"],
+[1329,"Nota, Roxanne, ","Production Operator","PAD/Semi Finished","Female","PAD","May 21, 2026","2026-01-24","Probationary"],
+[1330,"Otero, Krizia Anne Queen, Boldios","Production Operator","PAD/Semi Finished","Female","PAD","","2026-01-24","Probationary"],
+[1331,"Panganiban, Sim, Merlan","Production Operator","PAD/Packing","Female","PAD","","2026-01-24","Probationary"],
+[1332,"Picardal, Paul Anthony, Cunanan","Production Operator","PAD/Molding Injection","MALE","PAD","","2026-01-24","Probationary"],
+[1333,"Portillano, Mariel Antonette, Magdali","Production Operator","PAD/Semi Finished","Female","PAD","September 30, 2026","2026-01-24","Probationary"],
+[1337,"Matriano, Maria Hazel, Estrada","Production Clerk_AD","PAD/PMC Office","Female","PAD","May 21, 2026","2026-01-24","Probationary"],
+[1340,"Alfiler, Jayson, Laysa","IT Specialist","Admin/IT","MALE","CO","October 15, 2026","2026-01-27","Probationary"],
+[1344,"Saballa, Jessica, Biros","QAQC Staff / Inspector_AD","QAQC_AD","Female","CO","June 18, 2026","2026-01-31","Probationary"],
+[1345,"Artigas, Michelle, Larino","Production Operator","PWR","Female","PWR","","2026-01-31","Probationary"],
+[1347,"Roxas, Joanna, Calderon","Production Operator","PWR","Female","PWR","","2026-01-31","Probationary"],
+[1351,"Encarguez, Eden, Canoy","Production Operator","PAD/Printing","Female","PAD","","2026-02-06","Probationary"],
+[1354,"Aguiluz, Valentine, Cobarrubia","Supervisor","Sales","Female","CO MGT","","2026-02-10","Probationary"],
+[1355,"Casimsiman, Zyrene, Agasang","Production Operator","PAD/Packing","Female","PAD","","2026-02-18","Probationary"],
+[1356,"Co, John Paul, Llera","DCC Staff","Audit/Compliance","MALE","CO","June 25, 2026","2026-02-18","Probationary"],
+[1358,"Ricahuerta, Eliackim Laurenz, Parado","QAQC Clerk_AD","QAQC_AD","Female","CO","May 21, 2026","2026-02-18","Probationary"],
+[1359,"Serat, Lea, Castillano","QAQC Staff / Inspector_AD","QAQC_AD","Female","CO","September 30, 2026","2026-02-18","Probationary"],
+[1360,"Uribe, Nanilyn, Llaneta","Cleaner","Admin","Female","CO","","2026-02-18","Probationary"],
+[1364,"Crisostomo, Luisa Jane, Garrido","Manager","Sales","Female","CO MGT","May 21, 2026","2026-03-03","Probationary"],
+[1368,"Yuson, Lendio Jr., Ringcopan","Company Driver ","Admin","Male","CO","","2026-03-05","Probationary"],
+[1369,"Encarnacion, Krizzie, ","Production Operator","PAD/Packing","Female","PAD","July 16, 2026","2026-03-10","Probationary"],
+[1374,"Valiente, Allan, Cabildo","Interpreter","PAD/Packing","Male","PAD","","2026-03-10","Probationary"],
+[1377,"Faustino, James Kenneth, Pullon","Design Staff","Design","Male","CO","May 21, 2026","2026-03-16","Probationary"],
+[1378,"Febiar, Ronalyn, Socro","Design Staff","Design","Female","CO","April 30, 2026","2026-03-16","Probationary"],
+[1382,"Monton, Angel, Plamio","QAQC Staff / Inspector","QAQC US","Male","CO","","2026-03-16","Probationary"],
+[1383,"Nepomuceno, Daniela Leane, Arguson","QAQC Clerk","QAQC AD","Female","CO","June 18, 2026","2026-03-16","Probationary"],
+[1384,"Osorio, Maria Demetria, Gumatay","Accounting Staff","Accounting","Female","CO","June 18, 2026","2026-03-16","Probationary"],
+[1386,"Agapuyan, Melvit, Alercon","Production Clerk","PAD/PMC Office","Female","PAD","","2026-03-16","Probationary"],
+[1389,"Bernardino, Luzviminda, ","Production Operator","PAD/Packing","Female","PAD","","2026-03-16","Probationary"],
+[1392,"Catalino, Zaynah, Mercado","Production Operator","PAD/Molding Injection","Male","PAD","","2026-03-16","Probationary"],
+[1400,"Jusi, Analiza, Merle","Production Operator","PAD/Spray Paint","Female","PAD","July 16, 2026","2026-03-16","Probationary"],
+[1404,"Reyes, Kashelle Kate, ","Production Operator","PAD/Screwing","Female","PAD","September 30, 2026","2026-03-16","Probationary"],
+[1405,"Villena, Maria Lolita, Orolfo","Production Operator","PAD/Semi Finished","Female","PAD","","2026-03-16","Probationary"],
+[1409,"Digo, Erika, Casaysayan","Production Operator","PWR","Female","PWR","","2026-03-16","Probationary"],
+[1410,"Flores, Mary Joy, Jayme","Production Operator","PWR","Female","PWR","","2026-03-16","Probationary"],
+[1411,"Habohab, Mary Grace, Bejano","Production Operator","PWR","Female","PWR","","2026-03-16","Probationary"],
+[1412,"Humarang, Irish Gem, Ciria","Production Operator","PWR","Female","PWR","","2026-03-16","Probationary"],
+[1413,"Marantal, Carina, Santonil","Production Operator","PWR","Female","PWR","","2026-03-16","Probationary"],
+[1415,"Nidera, Niño, Mendoza","Production Operator","PWR","Male","PWR","","2026-03-16","Probationary"],
+[1418,"Aricayos, Edlene, Aranas","Impex Staff","Impex","Female","CO","May 21, 2026","2026-03-16","Probationary"],
+[1419,"Bautista, Rowena, Bugarin","Production Operator","PWR","Female","PWR","","2026-03-21","Probationary"],
+[1423,"Mayordomo, Aya Dominique, Bocalbal","Production Operator","PWR","Female","PWR","","2026-03-21","Probationary"],
+[1430,"Garcia, Kimberly, Paiton","Production Operator","PAD/Screwing","Female","PAD","","2026-03-30","Probationary"],
+[1431,"Abiog, Angelita, Himantog","Production Operator","PAD/Spray Paint","Female","PAD","","2026-03-30","Probationary"],
+[1432,"Jamilla, Babylyn, Flores","Production Operator","PAD/Spray Paint","Female","PAD","","2026-03-30","Probationary"],
+[1433,"Medez, Rossbert, Pinca","Production Operator","PAD/Packing","Female","PAD","","2026-03-30","Probationary"],
+[1435,"Relucio, Cherrie, Ardina","Production Operator","PAD/Packing","Female","PAD","","2026-03-30","Probationary"],
+[1437,"Secretario, Jervie, Carreon","Production Operator","PAD/Spray Paint","Male","PAD","","2026-03-30","Probationary"],
+[1439,"Vivar, Abbegail, Trinidad","Production Operator","PAD/Packing","Female","PAD","October 27, 2026","2026-03-30","Probationary"],
+[1440,"Vivar, Noalyn Kate, Trinidad","Production Operator","PAD/Packing","Female","PAD","","2026-03-30","Probationary"],
+[1442,"Alberto, Almelita, Verona","Production Operator","PUS/ Packing","Female","PUS","","2026-04-06","Probationary"],
+[1443,"Azor, Shanen Nicole, Moliño","Production Operator","PUS/ Polishing","Female","PUS","","2026-04-06","Probationary"],
+[1446,"Bigalbal, Leniel, Pareja","Production Operator","PUS/ Hinge","Male","PUS","","2026-04-06","Probationary"],
+[1448,"Crisanto, Jean, Lucero","Production Operator","PUS/ Packing","Female","PUS","","2026-04-06","Probationary"],
+[1452,"Murillo, Charlene, Lontoc","Production Operator","PUS/CNC","Female","PUS","June 25, 2026","2026-04-06","Probationary"],
+[1453,"Nana, Ranieah, Cacayuran","Production Operator","PUS/ Packing","Female","PUS","","2026-04-06","Probationary"],
+[1454,"Panaligan, Patrick Jayson, ","Production Operator","PUS/CNC","Male","PUS","","2026-04-06","Probationary"],
+[1455,"Rusaban, Joanna, Tuyor","Production Operator","PUS/ Packing","Female","PUS","","2026-04-06","Probationary"],
+[1457,"Roa, Juna Mae, Caño","Design Staff","Design","Female","CO","April 30, 2026","2026-04-06","Probationary"],
+[1459,"Sabaulan, Nonette, Marbella","Manager","Impex","Female","CO MGT","","2026-04-06","Probationary"],
+[1458,"Cortez, Honey Cristy, ","QAQC_Clerk","QAQC_AD","Female","CO","May 21, 2026","2026-04-10","Probationary"],
+[1460,"Robledo, Monica, Siena","Admin Staff","Admin","Female","CO","October 15, 2026","2026-04-10","Probationary"],
+[1461,"Aguja, Shandy Lou, Mangkit","Production Operator","PAD/Packing","Female","PAD","","2026-04-11","Probationary"],
+[1462,"Alia, Leonard, Udtohan","Production Operator","PAD/Molding Injection","Male","PAD","July 16, 2026","2026-04-11","Probationary"],
+[1463,"Altarejos, Jhomarie, Madrid","Production Operator","PAD/Packing","Female","PAD","June 18, 2026","2026-04-11","Probationary"],
+[1464,"Cabungcal, Marichelle, Mendez","Production Operator","PAD/Packing","Female","PAD","","2026-04-11","Probationary"],
+[1466,"Dela Vega, Jackielyn, ","Production Operator","PAD/Packing","Female","PAD","","2026-04-11","Probationary"],
+[1467,"Echanova, Magdalena Jesusa, Costodio","Production Operator","PAD/Spray Paint","Female","PAD","","2026-04-11","Probationary"],
+[1470,"Gastardo, Madelyn, Purisima","Production Operator","PAD/Spray Paint","Female","PAD","","2026-04-11","Probationary"],
+[1469,"Garcia, Irene, Gualves","Production Operator","PAD/Packing","Female","PAD","October 27, 2026","2026-04-11","Probationary"],
+[1471,"Lagunilla, Lyza Marie, Sarciego","Production Operator","PAD/Packing","Female","PAD","","2026-04-11","Probationary"],
+[1473,"Manansala, Rubelyn, Francia","Production Operator","PAD/Semi Finished","Female","PAD","","2026-04-11","Probationary"],
+[1474,"Narciso, Anna, Marcelo","Production Operator","PAD/Spray Paint","Female","PAD","","2026-04-11","Probationary"],
+[1475,"Nuñez, Erecka, Mercado","Production Operator","PAD/Spray Paint","Female","PAD","","2026-04-11","Probationary"],
+[1476,"Ortiz, Eva Mae, Ariate","Production Operator","PAD/Packing","Female","PAD","","2026-04-11","Probationary"],
+[1478,"Panganiban, Katrina, ","Production Operator","PAD/Semi Finished","Female","PAD","","2026-04-11","Probationary"],
+[1481,"Salgado, Edrelyn, Sosa","Production Operator","PAD/Printing","Female","PAD","September 30, 2026","2026-04-11","Probationary"],
+[1485,"Parcon, Sunshine, Hernandez","QC Laison","QAQC_US","Female","CO","","2026-04-21","Probationary"],
+[1487,"Pangilinan, Robelyn, Amaro","Production Operator","PAD/Printing","Female","PAD","September 30, 2026","2026-04-21","Probationary"],
+[1488,"Agudilla, Blessie, Arnes","Production Operator","PUS/ Packing","Female","PUS","July 16, 2026","2026-04-24","Probationary"],
+[1490,"Cuña, Ronalyn, Labesig","Production Operator","PUS/ Hinge","Female","PUS","","2026-04-24","Probationary"],
+[1492,"Domayan, Isabel, ","Production Operator","PUS/Temple","Female","PUS","","2026-04-24","Probationary"],
+[1493,"Fernando, Marjorie, Duran","Production Operator","PUS/Temple","Female","PUS","","2026-04-24","Probationary"],
+[1494,"Gacilo, Aiza, Sierra","Production Operator","PUS/ Hinge","Female","PUS","","2026-04-24","Probationary"],
+[1495,"Limpin, Rechie, Acabo","Production Operator","PUS/ Hinge","Female","PUS","","2026-04-24","Probationary"],
+[1496,"Retuya, Angelyn, Requerne","Production Operator","PUS/Temple","Female","PUS","","2026-04-24","Probationary"],
+[1498,"Esguerra, Mark Laurence, Juntura","Interpreter","PUS/PMC Office","Male","PUS","","2026-04-27","Probationary"],
+[1500,"Arbis, Princess Ayezzah, Albancis","Production Operator","PAD/Packing","Female","PAD","","2026-05-04","Probationary"],
+[1501,"Astor, Rosebelle Ann, Gemoro","Production Operator","PAD/Printing","Female","PAD","July 16, 2026","2026-05-04","Probationary"],
+[1505,"Domdom, Marfe, Escultura","Production Operator","PAD/Semi Finished","Female","PAD","","2026-05-04","Probationary"],
+[1506,"Francisco, John Person, Ocampo","Production Operator","PAD/Semi Finished","Male","PAD","","2026-05-04","Probationary"],
+[1507,"Hunter, Jessa, Salomo","Production Operator","PAD/Molding Injection","Female","PAD","","2026-05-04","Probationary"],
+[1508,"Magsino, Princess Ann, Catapang","Production Operator","PAD/Packing","Female","PAD","","2026-05-04","Probationary"],
+[1512,"Enconado, Lyslie, Laureta","QAQC Staff / Inspector","QAQC_US","Female","CO","","2026-05-05","Probationary"],
+[1515,"Andrion, Shenalyn, Sabanal","Production Operator","PAD/Packing","Female","PMG","May 21, 2026","2026-05-09","Probationary"],
+[1518,"Priego, Anjiello Nicole, Santiago","Production Operator","PAD/Packing","Male","PAD","","2026-05-09","Probationary"],
+[1519,"Bartolata, Trisha Mae, Sto. Domingo","HR Staff","Human Resources","Female","CO","May 21, 2026","2026-05-09","Probationary"],
+[1524,"Barola, Marc Junnie, Guerrero","Production Operator ","PAD/Spray Paint","Male","PAD","July 16, 2026","2026-05-16","Probationary"],
+[1525,"Bocar, Ailyn, Quizon","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1528,"Espiritu, Jocilyn , Arlanza","Production Operator ","PAD/Spray Paint","Female","PAD","","2026-05-16","Probationary"],
+[1530,"Javier, Jennifer, Bitas","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1531,"Lucenesio, Patricia, Alig","Production Operator ","PAD/Packing","Female","PAD","June 18, 2026","2026-05-16","Probationary"],
+[1532,"Maceda, Jonivie , Mantilla","Production Operator ","PAD/Assembly","Female","PAD","","2026-05-16","Probationary"],
+[1533,"Manait, John Michael, ","Production Operator ","PAD/Spray Paint","Male","PAD","October 15, 2026","2026-05-16","Probationary"],
+[1535,"Olayres, Gladys, Gagarin","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1536,"Planta, Ilyanna Kate, Rigay","Production Operator ","PAD/Packing","Female","PAD","October 27, 2026","2026-05-16","Probationary"],
+[1537,"Prudente, Jya, Recaña","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1538,"Reserva, Jhon Joyce, Mellomida","Production Operator ","PAD/Packing","Female","PAD","July 16, 2026","2026-05-16","Probationary"],
+[1539,"Robles, Angela Lourdes, Maula","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1540,"Sante, Sherry, Fontejon","Production Operator ","PMG","Female","PMG","","2026-05-16","Probationary"],
+[1541,"Sevilla, Sunshine, Derain","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1542,"Tarrayo, Twinkle Jerly Mae, ","Production Operator ","PAD/Packing","Female","PAD","","2026-05-16","Probationary"],
+[1544,"Batiancila, Nicole, Alao","Production operator","PAD/Semi Finished","Female","PAD","","2026-05-23","Probationary"],
+[1545,"Lictaoa, Dexter, Quiña","Production operator","PAD/Molding Injection","Male","PAD","","2026-05-23","Probationary"],
+[1546,"Madulid, Marvin, Valencia","Production operator","PAD/Warehouse","Male","PAD","","2026-05-23","Probationary"],
+[1548,"Ojeñar, Junslu, Villareal","QMS Staff","Audit/Compliance","Female","CO","June 18, 2026","2026-05-23","Probationary"],
+[1549,"Pangsayan, Normala, Magulama","QA/QC Inspector","Quality Control / US","Female","CO","","2026-05-23","Probationary"],
+[1550,"Solis, Sandra Lee, Mayo","QA/QC Clerk","Quality Control / US","Female","CO","June 25, 2026","2026-05-23","Probationary"],
+[1551,"Alabas, Rachel, Saguiped","Chinese Interpreter","PWR","Female","PWR","","2026-05-23","Probationary"],
+[1552,"Aquino, Babylyn, Calda","Sewer","PWR","Female","PWR","","2026-05-23","Probationary"],
+[1553,"Datinginoo, Wendy, Abellada","Production Clerk","PAD/Packing","Female","PAD","","2026-06-01","Probationary"],
+[782,"Natividad, Renan John, Dela Cruz","HR Staff","Human Resources","Male","CO","May 21, 2026","2025-08-30","Regular"],
+[611,"Teoxon, Joan, Dela Cruz","Production Operator","PWR","Female","PWR","","2025-08-16","Regular"],
+[1560,"Ronda, Vanessa, Toroba","QA/QC Inspector","Quality Control US ","Female","CO","","2026-06-06","Probationary"],
+[1561,"Santos, Ervin Joshua , Belarmino ","QA/QC Inspector","Quality Control US ","Male","CO","","2026-06-06","Probationary"],
+[1562,"Alimangohan, Richelle, ","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1563,"Auditor, Phoebe, Balista","Production Operator ","Injection Spray","Female","PAD","October 15, 2026","2026-06-06","Probationary"],
+[1564,"Chua, Ashley Janelle , Trinidad","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1566,"Lexio, Mikka, Daleon","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1567,"Nevado, Janet, Manangan","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1568,"Ochavez, Catherine, Tarin ","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1569,"Ped, Rowell, Ulanimo","Production Operator ","Injection Spray","Male","PAD","","2026-06-06","Probationary"],
+[1570,"Rodillas, Asila, Idaño","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1571,"Zamora, Nezil, Atibagos","Production Operator ","Injection Spray","Female","PAD","","2026-06-06","Probationary"],
+[1572,"Alaman, Princess Theresa, Temblor","Production Operator ","PUS/PMC Office","Female","PUS","June 18, 2026","2026-06-06","Probationary"],
+[1573,"Balais, Sally , Cruel","Production Operator ","PUS/ Packing","Female","PUS","","2026-06-06","Probationary"],
+[1574,"Balonzo, Liezel , Estrada","Production Operator ","PUS/ Polishing","Female","PUS","","2026-06-06","Probationary"],
+[1575,"Barce , Claire Anne, Clavano","Production Operator ","PUS/ Packing","Female","PUS","","2026-06-06","Probationary"],
+[1576,"Castro, Jaquilyn, Saguidon","Production Operator ","PUS/CNC","Female","PUS","June 25, 2026","2026-06-06","Probationary"],
+[1577,"Colisao, Riza Mae , Ciervo","Production Operator ","PUS/ Hinge","Female","PUS","June 25, 2026","2026-06-06","Probationary"],
+[1578,"Dacanay, Joy, Cayanga","Production Operator ","PUS/ Packing","Female","PUS","","2026-06-06","Probationary"],
+[1579,"Felices, Jenny Rose, Basa","Production Operator ","PUS/ Hinge","Female","PUS","","2026-06-06","Probationary"],
+[1580,"Gaitan, Melanie, Arbues","Production Operator ","PUS/ Packing","Female","PUS","September 30, 2026","2026-06-06","Probationary"],
+[1581,"Hernandez, James Peter, Osorio","Production Operator ","PUS/ Packing","Male","PUS","","2026-06-06","Probationary"],
+[1582,"Jacinto, Jessa, Lopez","Production Operator ","PUS/ Packing","Female","PUS","","2026-06-06","Probationary"],
+[1583,"Ortega, Andrea, Dauba","Production Operator ","PUS/ Packing","Female","PUS","","2026-06-06","Probationary"],
+[1584,"Ursal, Rommel, Golina","Production Operator ","PUS/ Packing","Male","PUS","June 25, 2026","2026-06-06","Probationary"],
+[1585,"Diestro, Shiela, Salino","QC Inspector","Quality Control US ","Female","CO","","2026-06-16","Probationary"],
+[1586,"Jamandre, Kalvin Cleine, ","QC Inspector","Quality Control US ","Male","CO","","2026-06-16","Probationary"],
+[1587,"Rivera, Christopher, Jarillas","Section Leader","PAD/","Male","PAD","","2026-06-16","Probationary"],
+[1588,"Casaljay, Leny , Alvetie","Production operator","PUS/","Female","PUS","","2026-06-16","Probationary"],
+[1589,"Laturnas, Key, Camero","Production operator","PUS/","Female","PUS","","2026-06-16","Probationary"],
+[1590,"Lalangan, Lanie, Montero","Production operator","PUS/","Female","PUS","","2026-06-16","Probationary"],
+[1591,"Ocampo, Ivan, Custodio","Production operator","PUS/","Male","PUS","","2026-06-16","Probationary"],
+[1592,"Pajaganas, Niña, Romo","Production operator","PUS/","Female","PUS","","2026-06-16","Probationary"],
+[1593,"Violata, Gian Charles, Balaca","Production operator","PUS/","Male","PUS","","2026-06-16","Probationary"],
+[1606,"De Felipe, Geraldine","Production operator","PAD/Packing",null,"PAD","July 16, 2026","","Probationary"],
+[1596,"Felices, Via Rose, Basa","Production Operator","PMG",null,"PMG","","2026-06-22","Probationary"],
+[1600,"Fernandez, Angela, Nuñez","Production operator","PUS/",null,"PUS","","2026-06-20","Probationary"],
+[1606,"De Felipe, Geraldine, Pachico","Production Operator"," ",null,"PAD","","2026-06-27","Probationary"],
+[1609,"Marinas, Krezel Mae , Dabandan","Production Operator",null,null,"PAD","","2026-06-27","Probationary"],
+[1613,"Tamio, Jaycelanne, Santos","Production Operator",null,null,"PAD","","2026-06-27","Probationary"],
+[1614,"Tuyac, Angelika Elyza, Bautista","Production Operator",null,null,"PAD","","2026-06-27","Probationary"],
+[1616,"Ape, Angie, Tucong","Cargo Truck Driver","Admin",null,"CO","","2026-07-13","Probationary"],
+[1617,"Delos Reyes, Raiza, Montano","Warehouse Staff",null,null,"PAD","","2026-07-11","Probationary"],
+[1620,"Valenzuela, Fernan, Paladin","EHS Staff","Audit/Compliance",null,"CO","","2026-07-16","Probationary"],
+[1622,"Santillan, Kelly Bryan, Sattar","Warehouse Staff",null,null,"PAD","","2026-08-01","Probationary"],
+[1626,"Umandal, Erizel, Labrador","QA/QC Clerk",null,null,"CO","","2026-08-17","Probationary"],
+[1627,"Abarro, Daniza Marvic, Barker","HR Staff","Human Resources",null,"CO","September 30, 2026","2026-08-24","Probationary"],
+[1628,"Soria, John Llyod, Lubag","QA/QC Clerk",null,null,"CO","October 15, 2026","2026-08-24","Probationary"],
+[1629,"Pilapil, Katerine Joy, Mojica","Assistant Accounting Manager","Accounting",null,"CO","","2026-09-01","Probationary"],
+[1631,"Sierra,  Francis Anabelle, Ibale","Production Clerk",null,null,"PMG","October 15, 2026","2026-08-24","Probationary"],
+[1632,"Alvaro, Jannelle , Soria","Production Operator","PMG",null,"PMG","","2026-08-24","Probationary"],
+[1633,"Natural , Robert Joseph, Retener","Production Operator","PMG",null,"PMG","","2026-09-01","Probationary"],
+[1634,"Cabrera, Maricris, Tapawan","Cleaner","Admin",null,"CO","","2026-09-05","Probationary"],
+[1635,"Marco, Villana, Mañalac","Sewer",null,null,"PWR","","2026-09-12","Probationary"],
+[1636,"Poblete, Michelle, Casama","Sewer",null,null,"PWR","","2026-09-12","Probationary"],
+[1637,"Anciado, Christian Jhoy , Mosatalla","QA/QC Inspector",null,null,"CO","","2026-09-12","Probationary"],
+[1639,"Eraya, Doreen Joy, Pillado","QA/QC Insptor",null,null,"CO","","2026-09-12","Probationary"],
+[1642,"Sabado, John Cedric, Samiano","Sales Coordinator","Sales",null,"CO","October 15, 2026","2026-09-26","Probationary"],
+[1644,"Sosa, Conrado, Arauban","Accounting Staff","Accounting",null,"CO","October 15, 2026","2026-09-26","Probationary"],
+[1645,"Verano, Gilbert, Arciaga","Design Staff","Design",null,"CO","October 15, 2026","2026-10-03","Probationary"],
+[1646,"Pipit, Lienczy, Asparagos","Audit/ Compliance Staff","Audit/Compliance",null,"CO","October 27, 2026","2026-10-03","Probationary"],
+[1647,"Sierra, Milsen Ann, Arbilda","Production Operator",null,null,"PMG","October 15, 2026","2026-10-03","Probationary"],
+[1648,"Garcia, Angelyn, Gualvez","Production Operator",null,null,"PAD","","2026-10-03","Probationary"],
+[1654,"Macayayong, Monica P.","Cleaner","FMD",null,"CO","October 27, 2026","2026-10-17","Probationary"],
+[1655,"Romero, John Marco, ","Truck Helper","FMD",null,"CO","","2026-10-17","Probationary"],
+[1656,"Balane, Melandro, Hanova","Cargo Truck Driver","GAD",null,"CO","","2026-10-21","Probationary"],
+[1657,"Magtalas,Antonette, Picquinto","QA/QC Inspector","GAD",null,"CO","","2026-10-22","Probationary"],
+[1635,"Marco, Villana, Mañalac","Production Operator","PWR",null,"PWR","","2026-09-12","Probationary"],
+[1636,"Poblete, Michelle, Casama","Production Operator","PWR",null,"PWR","","2026-09-12","Probationary"],
+];
+const KEY="osh-monitor-v2";
+const BASE=DATA.map((a,i)=>({k:"e"+i,id:a[0],name:a[1],pos:a[2]||"",dept:(a[3]||"").trim(),grp:a[5]||"",sched0:a[6]||"",hired0:a[7]||"",stat0:a[8]||""}));
+let M={},X=[],SS=[],db=null,emps=[];
+try{const L=JSON.parse(localStorage.getItem(KEY)||"{}");M=L.M||{};X=L.X||[];SS=L.SS||[]}catch(e){}
+let tab="dash",q="",fd="",fs="",fg="",eg="",lim=60,cur="";
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({M,X,SS}))}catch(e){}};
+function secOf(e){const d=(e.dept||"").toUpperCase();if(/^(QUALITY CONTROL|QA\/?QC)/.test(d))return d.includes("AD")?"QAQCPADPWR":"QAQCPUS";return e.grp==="CO MGT"?"CO":(e.grp||"Other")}
+function refresh(){emps=[...X,...BASE].map(e=>{const m=M[e.k]||{};return{...e,sec:secOf(e),sched:m.sched!==undefined?m.sched:(e.sched0||""),att:m.att||"",hired:m.hired!==undefined?m.hired:(e.hired0||""),stat:m.stat!==undefined?m.stat:(e.stat0||"")}})}
+const STAT=["Probationary","Regular","Separated","Resigned"];
+const yos=e=>{if(!e.hired)return"";const h=new Date(e.hired+"T00:00");if(isNaN(h))return"";return Math.max(0,(Date.now()-h)/864e5/365.25).toFixed(2)};
+const P=()=>({sched:true,att:true});
+const E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sessions=()=>[...new Set([...SS,...emps.map(e=>e.sched).filter(Boolean)])].sort((a,b)=>new Date(a)-new Date(b));
+const depts=()=>[...new Set(emps.map(e=>e.dept).filter(Boolean))].sort();
+const grps=()=>["CO","PUS","PAD","PWR","PMG","QAQCPUS","QAQCPADPWR","Other"].filter(g=>emps.some(e=>e.sec===g));
+const done=e=>e.att==="Trained"||e.att==="Present"||e.att==="Late";
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+function mark(k,f,v){M[k]={...(M[k]||{}),[f]:v};if(db)db.doc("marks/"+k).set(M[k]).catch(()=>{});else save();refresh();render()}
+function markAll(a){emps.filter(e=>e.sched===cur).forEach(e=>{M[e.k]={...(M[e.k]||{}),att:a};if(db)db.doc("marks/"+e.k).set(M[e.k]).catch(()=>{})});if(!db)save();refresh();render()}
+function newS(){const v=document.getElementById("nd").value;if(!v)return;const s=new Date(v+"T00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});cur=s;if(db)db.doc("sessions/"+s.replace(/[^A-Za-z0-9]/g,"-")).set({label:s}).catch(()=>{});else{if(!SS.includes(s))SS.push(s);save()}if(!SS.includes(s))SS.push(s);render()}
+function add(){const g=i=>document.getElementById(i).value.trim();if(!g("a2"))return;const o={id:g("a1"),name:g("a2"),pos:g("a3"),dept:g("a4"),grp:g("a5"),sched0:"",hired0:g("a6"),stat0:g("a7")||"Probationary"};if(db)db.collection("extra").add(o).catch(()=>{});else{X.unshift({k:"x"+Date.now(),...o});save();refresh();render()}}
+function nav(){const t=[["dash","Dashboard"],["emp","Employees"],["ses","Sessions & attendance"]];document.getElementById("nav").innerHTML=t.map(([k,l])=>`<button class="${tab==k?"on":""}" onclick="tab='${k}';q='';fd='';render()">${l}</button>`).join("");document.getElementById("who").textContent=db?"Shared records · saved automatically":"Fernan Valenzuela "}
+const attSel=e=>`<select ${P().att?"":"disabled"} onchange="mark('${e.k}','att',this.value)"><option value="" ${done(e)?"":"selected"}>Not yet trained</option><option value="Trained" ${done(e)?"selected":""}>Trained</option></select>`;
+function dash(){const n=emps.length,sc=emps.filter(e=>e.sched).length,tr=emps.filter(done).length,ab=n-tr;
+const rows=sessions().map(s=>{const l=emps.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td><div class="bar"><i style="width:${pct(p,l.length)}%"></i></div></td><td>${pct(p,l.length)}%</td></tr>`}).join("");
+const dr=grps().map(d=>{const l=emps.filter(e=>e.sec===d),p=l.filter(done).length;return`<tr style="cursor:pointer" onclick="tab='emp';eg='${d}';render()"><td><b>${E(d)}</b> →</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td>${pct(p,l.length)}%</td></tr>`}).join("");
+return`<div class="cards"><div class="card"><b>${n}</b><span>Employees</span></div><div class="card okc"><b>${tr}</b><span>Trained</span></div><div class="card"><b>${ab}</b><span>Not yet trained</span></div><div class="card"><b>${pct(tr,n)}%</b><span>Completion</span></div></div>
+<div class="box"><h2>By training session</h2><div class="w"><table><tr><th>Date</th><th>Assigned</th><th>Trained</th><th>Not yet</th><th>Progress</th><th>%</th></tr>${rows||"<tr><td colspan=6>No sessions yet</td></tr>"}</table></div></div>
+<div class="box"><h2>By Department (CO, PUS, PAD, PWR, PMG)</h2><div class="w"><table><tr><th>Department/Section</th><th>Total</th><th>Trained</th><th>Not Yet Trained</th><th>%</th></tr>${dr}</table></div></div>`}
+function emp(){const G=eg,gl=grps(),sel=G?[G]:[""];
+const chips=`<div class="tools"><button class="b ${G?"":"p"}" onclick="eg='';q='';render()">All Departments</button>${gl.map(g=>`<button class="b ${g==G?"p":""}" onclick="eg='${g}';q='';render()">${E(g)}</button>`).join("")}</div>`;
+const tools=`<div class="tools"><input id="q" placeholder="Search name, emp no, position" value="${E(q)}" oninput="q=this.value.toLowerCase();render('q')"><select onchange="fs=this.value;render()"><option value="">All dates</option><option value="none" ${fs=="none"?"selected":""}>No date yet</option>${sessions().map(s=>`<option ${s===fs?"selected":""}>${E(s)}</option>`).join("")}</select><button class="b p" onclick="exp()">Export CSV</button></div>`;
+const addf=`<details class="tools"><summary>+ Add employee</summary><div class="tools" style="margin-top:8px"><input id="a1" placeholder="Emp no"><input id="a2" placeholder="Full name (Last, First, Middle)"><input id="a3" placeholder="Position"><input id="a4" placeholder="Department / Section"><input type="date" id="a6" title="Hired date"><select id="a7">${STAT.map(s=>`<option>${s}</option>`).join("")}</select><select id="a5">${gl.map(g=>`<option ${g==G?"selected":""}>${E(g)}</option>`).join("")}</select><button class="b p" onclick="add()">Add</button></div></details>`;
+const tables=sel.map(g=>{
+  // Full list sorted by real Emp No. — used for "All Departments" numbering
+  const allSortedByEmpNo = [...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
+  // Filtered list for current department, also sorted by Emp No.
+  const all=emps.filter(e=>g===""||e.sec===g).sort((a,b)=>(+a.id||0)-(+b.id||0));
+  const l=all.filter(e=>(!q||(e.name+e.id+e.pos).toLowerCase().includes(q))&&(fs===""||(fs==="none"?!e.sched:e.sched===fs)));
+  
+  if(!l.length&&(q||fs!==""))return"";
+  
+  const rows=l.map((e, idx)=>{
+    let displayRowNo;
+    if(g===""){
+      // ===== ALL DEPARTMENTS =====
+      // No. = their true position in the FULL company list by Emp No.
+      displayRowNo = allSortedByEmpNo.findIndex(x => x.k === e.k) + 1;
+    }else{
+      // ===== SPECIFIC DEPARTMENT SELECTED =====
+      // No. = reset to 1,2,3… counting only within this filtered group
+      displayRowNo = idx + 1;
+    }
+    // Emp No. = always their REAL/official number — never changes
+    const displayEmpNo = E(e.id);
+    
+    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}">
+      <td>${displayRowNo}</td>
+      <td>${displayEmpNo}</td>
+      <td>${E(e.name)}</td>
+      <td>${E(e.pos)}</td>
+      <td>${E(e.dept)}</td>
+      <td><select onchange="mark('${e.k}','sched',this.value)">
+        <option value="">— no date —</option>
+        ${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}
+      </select></td>
+      <td>${attSel(e)}</td>
+      <td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td>
+      <td><b>${yos(e)}</b></td>
+      <td><select onchange="mark('${e.k}','stat',this.value)">
+        <option value="" ${e.stat?"":"selected"}>—</option>
+        ${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}
+      </select></td>
+    </tr>`;
+  }).join("");
+  
+  return`<div class="box">
+    <h2>${E(g||"All Departments")} · ${all.length} employees · ${all.filter(done).length} trained</h2>
+    <div class="w">
+      <table>
+        <tr>
+          <th>No.</th>
+          <th>Emp No.</th>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Department / Section</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Hired Date</th>
+          <th>Years of Service</th>
+          <th>Employment Status</th>
+        </tr>${rows}
+      </table>
+    </div>
+  </div>`;
+}).join("");
+
+return`<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Red = resigned</div></div>${tables||'<div class="box">No matching employees</div>'}`;
+}
+
+function ses(){
+  const ss=sessions(),p=P();
+  if(!cur||!ss.includes(cur))cur=ss[0]||"";
+  const allSortedByEmpNo = [...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
+  const l=emps.filter(e=>e.sched===cur).sort((a,b)=>(+a.id||0)-(+b.id||0));
+  
+  const body=l.map((e, idx)=>{
+    // Session view: follows full Emp No. sequence like "All Departments"
+    const displayRowNo = allSortedByEmpNo.findIndex(x => x.k === e.k) + 1;
+    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}">
+      <td>${displayRowNo}</td>
+      <td>${E(e.id)}</td>
+      <td>${E(e.name)}</td>
+      <td>${E(e.sec)}</td>
+      <td><span class="np">${attSel(e)}</span><span class="pr">${done(e)?"Trained":"Not yet trained"}</span></td>
+      <td class="pr" style="width:140px"></td>
+    </tr>`;
+  }).join("");
+  
+  return`${p.sched?`<div class="box np"><h2>New session</h2><div class="tools"><input type="date" id="nd"><button class="b p" onclick="newS()">Add session</button></div></div>`:""}
+<div class="box">
+  <div class="tools np">
+    <select onchange="cur=this.value;render()">${ss.map(s=>`<option ${s===cur?"selected":""}>${E(s)}</option>`).join("")}</select>
+    ${p.att?`<button class="b" onclick="markAll('Trained')">Mark all trained</button>
+    <button class="b d" onclick="markAll('')">Remove mark all trained</button>`:""}
+    <button class="b p" onclick="window.print()">Print monitoring sheet</button>
+  </div>
+  <h2 class="pr">8-Hour Mandatory OSH Training — ${E(cur)}</h2>
+  <div class="sub np">${l.length} participants · green = trained · red = resigned</div>
+  <div class="w">
+    <table>
+      <tr>
+        <th>No.</th>
+        <th>Emp No.</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Attendance</th>
+        <th class="pr">Signature</th>
+      </tr>${body||"<tr><td colspan=4>No participants for this session</td></tr>"}
+    </table>
+  </div>
+</div>`;
+}
+
+function exp(){
+  const r=[["Emp No","Name","Position","Department","Section / line","Hired Date","Years of Service","Employment Status","Date","Status"],
+    ...emps.map(e=>[e.id,e.name,e.pos,e.sec,e.dept,e.hired,yos(e),e.stat,e.sched,done(e)?"Trained":"Not yet trained"])
+  ];
+  const c=r.map(x=>x.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(c);
+  a.download="osh-training-monitoring.csv";
+  a.click();
+}
+
+function render(k){
+  if(!k&&document.activeElement&&document.activeElement.id=="q")k="q";
+  nav();
+  const app=document.getElementById("app");
+  app.innerHTML=tab=="dash"?dash():tab=="emp"?emp():ses();
+  if(k=="q"){
+    const i=document.getElementById("q");
+    i.focus();
+    i.setSelectionRange(i.value.length,i.value.length)
+  }
+}
+
+(() => {
+  refresh();
+  render();
+
+  (async () => {
+    try {
+      const c = window.claude && await claude.use("db");
+      if (!c) return;
+      db = c;
+      M = {};
+      X = [];
+      SS = [];
+
+      db.collection("marks").onSnapshot(s => {
+        M = {};
+        s.docs.forEach(d => M[d.id] = d.data());
+        refresh();
+        render();
+      }, () => {});
+
+      db.collection("extra").onSnapshot(s => {
+        X = s.docs.map(d => ({ k: "x" + d.id, ...d.data() }));
+        refresh();
+        render();
+      }, () => {});
+
+      db.collection("sessions").onSnapshot(s => {
+        SS = s.docs.map(d => d.data().label).filter(Boolean);
+        render();
+      }, () => {});
+
+      refresh();
+      render();
+    } catch (e) {}
+  })();
+})();
+</script></body></html>
