@@ -32,6 +32,9 @@ summary{cursor:pointer;color:var(--ac)}
 </style></head><body>
 <header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
 <nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const DATA=[
 [1,"Fu, Wysly, Tiu","Manager","GM","Male","CO MGT","","2023-05-02","Regular"],
@@ -633,18 +636,18 @@ function secOf(e){const d=(e.dept||"").toUpperCase();if(/^(QUALITY CONTROL|QA\/?
 function refresh(){emps=[...X,...BASE].map(e=>{const m=M[e.k]||{};return{...e,sec:secOf(e),sched:m.sched!==undefined?m.sched:(e.sched0||""),att:m.att||"",hired:m.hired!==undefined?m.hired:(e.hired0||""),stat:m.stat!==undefined?m.stat:(e.stat0||"")}})}
 const STAT=["Probationary","Regular","Separated","Resigned"];
 const yos=e=>{if(!e.hired)return"";const h=new Date(e.hired+"T00:00");if(isNaN(h))return"";return Math.max(0,(Date.now()-h)/864e5/365.25).toFixed(2)};
-const P=()=>({sched:true,att:true});
+const P=()=>({sched:canEdit,att:canEdit});
 const E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const sessions=()=>[...new Set([...SS,...emps.map(e=>e.sched).filter(Boolean)])].sort((a,b)=>new Date(a)-new Date(b));
 const depts=()=>[...new Set(emps.map(e=>e.dept).filter(Boolean))].sort();
 const grps=()=>["CO","PUS","PAD","PWR","PMG","QAQCPUS","QAQCPADPWR","Other"].filter(g=>emps.some(e=>e.sec===g));
 const done=e=>e.att==="Trained"||e.att==="Present"||e.att==="Late";
 const pct=(a,b)=>b?Math.round(a*100/b):0;
-function mark(k,f,v){M[k]={...(M[k]||{}),[f]:v};if(db)db.doc("marks/"+k).set(M[k]).catch(()=>{});else save();refresh();render()}
-function markAll(a){emps.filter(e=>e.sched===cur).forEach(e=>{M[e.k]={...(M[e.k]||{}),att:a};if(db)db.doc("marks/"+e.k).set(M[e.k]).catch(()=>{})});if(!db)save();refresh();render()}
-function newS(){const v=document.getElementById("nd").value;if(!v)return;const s=new Date(v+"T00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});cur=s;if(db)db.doc("sessions/"+s.replace(/[^A-Za-z0-9]/g,"-")).set({label:s}).catch(()=>{});else{if(!SS.includes(s))SS.push(s);save()}if(!SS.includes(s))SS.push(s);render()}
-function add(){const g=i=>document.getElementById(i).value.trim();if(!g("a2"))return;const o={id:g("a1"),name:g("a2"),pos:g("a3"),dept:g("a4"),grp:g("a5"),sched0:"",hired0:g("a6"),stat0:g("a7")||"Probationary"};if(db)db.collection("extra").add(o).catch(()=>{});else{X.unshift({k:"x"+Date.now(),...o});save();refresh();render()}}
-function nav(){const t=[["dash","Dashboard"],["emp","Employees"],["ses","Sessions & attendance"]];document.getElementById("nav").innerHTML=t.map(([k,l])=>`<button class="${tab==k?"on":""}" onclick="tab='${k}';q='';fd='';render()">${l}</button>`).join("");document.getElementById("who").textContent=db?"Shared records · saved automatically":"Fernan Valenzuela "}
+function mark(k,f,v){if(!canEdit)return;M[k]={...(M[k]||{}),[f]:v};if(db)db.doc("marks/"+k).set(M[k]).catch(()=>{});else save();refresh();render()}
+function markAll(a){if(!canEdit)return;emps.filter(e=>e.sched===cur).forEach(e=>{M[e.k]={...(M[e.k]||{}),att:a};if(db)db.doc("marks/"+e.k).set(M[e.k]).catch(()=>{})});if(!db)save();refresh();render()}
+function newS(){if(!canEdit)return;const v=document.getElementById("nd").value;if(!v)return;const s=new Date(v+"T00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});cur=s;if(db)db.doc("sessions/"+s.replace(/[^A-Za-z0-9]/g,"-")).set({label:s}).catch(()=>{});else{if(!SS.includes(s))SS.push(s);save()}if(!SS.includes(s))SS.push(s);render()}
+function add(){if(!canEdit)return;const g=i=>document.getElementById(i).value.trim();if(!g("a2"))return;const o={id:g("a1"),name:g("a2"),pos:g("a3"),dept:g("a4"),grp:g("a5"),sched0:"",hired0:g("a6"),stat0:g("a7")||"Probationary"};if(db)db.collection("extra").add(o).catch(()=>{});else{X.unshift({k:"x"+Date.now(),...o});save();refresh();render()}}
+function nav(){const t=[["dash","Dashboard"],["emp","Employees"],["ses","Sessions & attendance"]];document.getElementById("nav").innerHTML=t.map(([k,l])=>`<button class="${tab==k?"on":""}" onclick="tab='${k}';q='';fd='';render()">${l}</button>`).join("");document.getElementById("who").innerHTML="Fernan Valenzuela &middot; "+(canEdit?'Signed in &middot; <a href="#" onclick="logout();return false" style="color:#fde68a">Log out</a>':'View only &middot; <a href="#" onclick="login();return false" style="color:#fde68a">Admin login</a>')}
 const attSel=e=>`<select ${P().att?"":"disabled"} onchange="mark('${e.k}','att',this.value)"><option value="" ${done(e)?"":"selected"}>Not yet trained</option><option value="Trained" ${done(e)?"selected":""}>Trained</option></select>`;
 function dash(){const n=emps.length,sc=emps.filter(e=>e.sched).length,tr=emps.filter(done).length,ab=n-tr;
 const rows=sessions().map(s=>{const l=emps.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td><div class="bar"><i style="width:${pct(p,l.length)}%"></i></div></td><td>${pct(p,l.length)}%</td></tr>`}).join("");
@@ -782,7 +785,7 @@ function render(k){
   if(!k&&document.activeElement&&document.activeElement.id=="q")k="q";
   nav();
   const app=document.getElementById("app");
-  app.innerHTML=tab=="dash"?dash():tab=="emp"?emp():ses();
+  app.innerHTML=tab=="dash"?dash():tab=="emp"?emp():ses();lock();
   if(k=="q"){
     const i=document.getElementById("q");
     i.focus();
@@ -790,40 +793,50 @@ function render(k){
   }
 }
 
+let canEdit=false;
+const OWNER="khenvalenzuela0@gmail.com";
+
+function lock(){
+  if(canEdit)return;
+  document.querySelectorAll("#app table select,#app table input").forEach(el=>el.disabled=true);
+  document.querySelectorAll("#app details.tools").forEach(el=>el.style.display="none");
+}
+
+function login(){
+  if(document.getElementById("lg"))return;
+  const d=document.createElement("div");
+  d.id="lg";
+  d.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:99";
+  d.innerHTML='<div class="box" style="min-width:260px"><h2>Admin login</h2><div class="tools" style="flex-direction:column"><input id="le" type="email" placeholder="Email"><input id="lp" type="password" placeholder="Password"><button class="b p" id="lgo">Login</button><button class="b" id="lcx">Cancel</button><div id="lerr" class="sub"></div></div></div>';
+  document.body.appendChild(d);
+  document.getElementById("lcx").onclick=()=>d.remove();
+  document.getElementById("lgo").onclick=()=>{
+    firebase.auth().signInWithEmailAndPassword(document.getElementById("le").value.trim(),document.getElementById("lp").value)
+      .then(()=>d.remove())
+      .catch(e=>document.getElementById("lerr").textContent="Login failed: "+e.code);
+  };
+}
+function logout(){firebase.auth().signOut()}
+
 (() => {
   refresh();
   render();
-
-  (async () => {
-    try {
-      const c = window.claude && await claude.use("db");
-      if (!c) return;
-      db = c;
-      M = {};
-      X = [];
-      SS = [];
-
-      db.collection("marks").onSnapshot(s => {
-        M = {};
-        s.docs.forEach(d => M[d.id] = d.data());
-        refresh();
-        render();
-      }, () => {});
-
-      db.collection("extra").onSnapshot(s => {
-        X = s.docs.map(d => ({ k: "x" + d.id, ...d.data() }));
-        refresh();
-        render();
-      }, () => {});
-
-      db.collection("sessions").onSnapshot(s => {
-        SS = s.docs.map(d => d.data().label).filter(Boolean);
-        render();
-      }, () => {});
-
-      refresh();
-      render();
-    } catch (e) {}
-  })();
+  try{
+    firebase.initializeApp({
+      apiKey:"AIzaSyB353pxS0ImC9faSAwKZvaf4KVYOqTmbFk",
+      authDomain:"monitoringsheetkhen.firebaseapp.com",
+      projectId:"monitoringsheetkhen",
+      storageBucket:"monitoringsheetkhen.firebasestorage.app",
+      messagingSenderId:"872029396614",
+      appId:"1:872029396614:web:5c91dff5c146fa1e457b07"
+    });
+    const fdb=firebase.firestore();
+    db=fdb;
+    M={};X=[];SS=[];
+    fdb.collection("marks").onSnapshot(s=>{M={};s.docs.forEach(d=>M[d.id]=d.data());refresh();render()},()=>{});
+    fdb.collection("extra").onSnapshot(s=>{X=s.docs.map(d=>({k:"x"+d.id,...d.data()}));refresh();render()},()=>{});
+    fdb.collection("sessions").onSnapshot(s=>{SS=s.docs.map(d=>d.data().label).filter(Boolean);render()},()=>{});
+    firebase.auth().onAuthStateChanged(u=>{canEdit=!!u&&u.email===OWNER;render()});
+  }catch(e){console.error(e)}
 })();
 </script></body></html>
