@@ -28,7 +28,7 @@ tr.ok td{background:var(--okbg);box-shadow:inset 3px 0 0 #16a34a}tr.sep td{opaci
 tr.res td{background:#7f1d1d!important;box-shadow:inset 3px 0 0 #ef4444;color:#fecaca}tr.res td:nth-child(3){color:#fecaca;font-weight:700}
 summary{cursor:pointer;color:var(--ac)}
 .pr{display:none}
-@media print{header,nav,.np{display:none!important}.pr{display:block}body{background:#fff;color:#000}.box{border:0;box-shadow:none;background:#fff}.box h2{color:#000}th,td{border:1px solid #999;color:#000}th{color:#000}tr.ok td{background:#dcfce7!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}tr.res td{background:#fecaca!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{header,nav,.np{display:none!important}.pr{display:block}body{background:#fff;color:#000}.box{border:0;box-shadow:none;background:#fff}.box h2{color:#000}th,td{border:1px solid #999;color:#000}th{color:#000}tr{break-inside:avoid}.pt{color:#000;font-size:15px;margin:0 0 6px}.pg{break-after:page;page-break-after:always}.pg:last-child{break-after:auto;page-break-after:auto}tr.res td{background:#fecaca!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style></head><body>
 <header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
 <nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main>
@@ -660,113 +660,78 @@ const chips=`<div class="tools"><button class="b ${G?"":"p"}" onclick="eg='';q='
 const tools=`<div class="tools"><input id="q" placeholder="Search name, emp no, position" value="${E(q)}" oninput="q=this.value.toLowerCase();render('q')"><select onchange="fs=this.value;render()"><option value="">All dates</option><option value="none" ${fs=="none"?"selected":""}>No date yet</option>${sessions().map(s=>`<option ${s===fs?"selected":""}>${E(s)}</option>`).join("")}</select><button class="b p" onclick="exp()">Export CSV</button></div>`;
 const addf=`<details class="tools"><summary>+ Add employee</summary><div class="tools" style="margin-top:8px"><input id="a1" placeholder="Emp no"><input id="a2" placeholder="Full name (Last, First, Middle)"><input id="a3" placeholder="Position"><input id="a4" placeholder="Department / Section"><input type="date" id="a6" title="Hired date"><select id="a7">${STAT.map(s=>`<option>${s}</option>`).join("")}</select><select id="a5">${gl.map(g=>`<option ${g==G?"selected":""}>${E(g)}</option>`).join("")}</select><button class="b p" onclick="add()">Add</button></div></details>`;
 const tables=sel.map(g=>{
-  // Full list sorted by real Emp No. — used for "All Departments" numbering
-  const allSortedByEmpNo = [...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
-  // Filtered list for current department, also sorted by Emp No.
+  const allSortedByEmpNo=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
   const all=emps.filter(e=>g===""||e.sec===g).sort((a,b)=>(+a.id||0)-(+b.id||0));
   const l=all.filter(e=>(!q||(e.name+e.id+e.pos).toLowerCase().includes(q))&&(fs===""||(fs==="none"?!e.sched:e.sched===fs)));
-  
   if(!l.length&&(q||fs!==""))return"";
-  
-  const rows=l.map((e, idx)=>{
-    let displayRowNo;
-    if(g===""){
-      // ===== ALL DEPARTMENTS =====
-      // No. = their true position in the FULL company list by Emp No.
-      displayRowNo = allSortedByEmpNo.findIndex(x => x.k === e.k) + 1;
-    }else{
-      // ===== SPECIFIC DEPARTMENT SELECTED =====
-      // No. = reset to 1,2,3… counting only within this filtered group
-      displayRowNo = idx + 1;
-    }
-    // Emp No. = always their REAL/official number — never changes
-    const displayEmpNo = E(e.id);
-    
+
+  const rows=l.map((e,idx)=>{
+    const displayRowNo=g===""?allSortedByEmpNo.findIndex(x=>x.k===e.k)+1:idx+1;
     return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}">
       <td>${displayRowNo}</td>
-      <td>${displayEmpNo}</td>
+      <td>${E(e.id)}</td>
       <td>${E(e.name)}</td>
       <td>${E(e.pos)}</td>
       <td>${E(e.dept)}</td>
-      <td><select onchange="mark('${e.k}','sched',this.value)">
-        <option value="">— no date —</option>
-        ${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}
-      </select></td>
-      <td>${attSel(e)}</td>
       <td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td>
       <td><b>${yos(e)}</b></td>
       <td><select onchange="mark('${e.k}','stat',this.value)">
         <option value="" ${e.stat?"":"selected"}>—</option>
         ${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}
       </select></td>
+      <td><select onchange="mark('${e.k}','sched',this.value)">
+        <option value="">— no date —</option>
+        ${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}
+      </select></td>
+      <td>${attSel(e)}</td>
     </tr>`;
   }).join("");
-  
+
   return`<div class="box">
     <h2>${E(g||"All Departments")} · ${all.length} employees · ${all.filter(done).length} trained</h2>
-    <div class="w">
-      <table>
-        <tr>
-          <th>No.</th>
-          <th>Emp No.</th>
-          <th>Name</th>
-          <th>Position</th>
-          <th>Department / Section</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Hired Date</th>
-          <th>Years of Service</th>
-          <th>Employment Status</th>
-        </tr>${rows}
-      </table>
-    </div>
+    <div class="w"><table>
+      <tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Hired Date</th><th>Years of Service</th><th>Employment Status</th><th>Date</th><th>Status</th></tr>${rows}
+    </table></div>
   </div>`;
 }).join("");
-
 return`<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Red = resigned</div></div>${tables||'<div class="box">No matching employees</div>'}`;
 }
 
 function ses(){
   const ss=sessions(),p=P();
   if(!cur||!ss.includes(cur))cur=ss[0]||"";
-  const allSortedByEmpNo = [...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
+  const allSortedByEmpNo=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
   const l=emps.filter(e=>e.sched===cur).sort((a,b)=>(+a.id||0)-(+b.id||0));
-  
-  const body=l.map((e, idx)=>{
-    // Session view: follows full Emp No. sequence like "All Departments"
-    const displayRowNo = allSortedByEmpNo.findIndex(x => x.k === e.k) + 1;
+  const tr=l.filter(done),nt=l.filter(e=>!done(e));
+
+  const body=l.map(e=>{
+    const displayRowNo=allSortedByEmpNo.findIndex(x=>x.k===e.k)+1;
     return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}">
-      <td>${displayRowNo}</td>
-      <td>${E(e.id)}</td>
-      <td>${E(e.name)}</td>
-      <td>${E(e.sec)}</td>
-      <td><span class="np">${attSel(e)}</span><span class="pr">${done(e)?"Trained":"Not yet trained"}</span></td>
-      <td class="pr" style="width:140px"></td>
+      <td>${displayRowNo}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td>${attSel(e)}</td>
     </tr>`;
   }).join("");
-  
+
+      const ptable=(arr,title)=>(grps().filter(g=>arr.some(e=>e.sec===g)).map(g=>{
+    const l=arr.filter(e=>e.sec===g);
+    return `<div class="pg"><h3 class="pt">${title} · ${E(g)} (${l.length}) — ${E(cur)}</h3>
+    <table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Department</th><th>Signature</th></tr>
+    ${l.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":""}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td style="width:150px"></td></tr>`).join("")}
+    </table></div>`;
+  }).join("")||`<div class="pg"><h3 class="pt">${title} (0) — ${E(cur)}</h3><p>None</p></div>`);
   return`${p.sched?`<div class="box np"><h2>New session</h2><div class="tools"><input type="date" id="nd"><button class="b p" onclick="newS()">Add session</button></div></div>`:""}
 <div class="box">
   <div class="tools np">
     <select onchange="cur=this.value;render()">${ss.map(s=>`<option ${s===cur?"selected":""}>${E(s)}</option>`).join("")}</select>
-    ${p.att?`<button class="b" onclick="markAll('Trained')">Mark all trained</button>
-    <button class="b d" onclick="markAll('')">Remove mark all trained</button>`:""}
+    ${p.att?`<button class="b" onclick="markAll('Trained')">Mark all trained</button><button class="b d" onclick="markAll('')">Remove mark all trained</button>`:""}
     <button class="b p" onclick="window.print()">Print monitoring sheet</button>
   </div>
   <h2 class="pr">8-Hour Mandatory OSH Training — ${E(cur)}</h2>
-  <div class="sub np">${l.length} participants · green = trained · red = resigned</div>
-  <div class="w">
-    <table>
-      <tr>
-        <th>No.</th>
-        <th>Emp No.</th>
-        <th>Name</th>
-        <th>Department</th>
-        <th>Attendance</th>
-        <th class="pr">Signature</th>
-      </tr>${body||"<tr><td colspan=4>No participants for this session</td></tr>"}
-    </table>
-  </div>
+  <div class="sub np">${l.length} participants · ${tr.length} trained · ${nt.length} not yet trained</div>
+  <div class="w np"><table>
+    <tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Department</th><th>Attendance</th></tr>
+    ${body||"<tr><td colspan=5>No participants for this session</td></tr>"}
+  </table></div>
+  <div class="pr">${ptable(tr,"TRAINED")}${ptable(nt,"NOT YET TRAINED")}</div>
 </div>`;
 }
 
