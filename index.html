@@ -794,7 +794,7 @@ function render(k){
 }
 
 let canEdit=false;
-const OWNER="khenvalenzuela0@gmail.com";
+const OWNERS=["khenvalenzuela0@gmail.com","bagong-admin@gmail.com"];
 
 function lock(){
   if(canEdit)return;
@@ -836,7 +836,7 @@ function logout(){firebase.auth().signOut()}
     fdb.collection("marks").onSnapshot(s=>{M={};s.docs.forEach(d=>M[d.id]=d.data());refresh();render()},()=>{});
     fdb.collection("extra").onSnapshot(s=>{X=s.docs.map(d=>({k:"x"+d.id,...d.data()}));refresh();render()},()=>{});
     fdb.collection("sessions").onSnapshot(s=>{SS=s.docs.map(d=>d.data().label).filter(Boolean);render()},()=>{});
-    firebase.auth().onAuthStateChanged(u=>{canEdit=!!u&&u.email===OWNER;render()});
+    firebase.auth().onAuthStateChanged(u=>{canEdit=!!u&&OWNERS.includes(u.email);render()});
   }catch(e){console.error(e)}
 })();
 </script></body></html>
