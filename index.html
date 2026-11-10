@@ -10,7 +10,7 @@ header{padding:22px 16px 18px;background:linear-gradient(135deg,#000,#2a2200);co
 nav{display:flex;gap:6px;padding:12px 16px;overflow-x:auto}
 nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
 nav button.on{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}
-main{padding:0 16px 40px;max-width:1100px;margin:auto}
+main{padding:0 10px 40px;max-width:100%;margin:auto}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;box-shadow:0 2px 8px rgba(250,204,21,.08)}
 .card b{display:block;font-size:26px;color:var(--ac)}.card span{color:var(--mu);font-size:12px}
@@ -19,19 +19,20 @@ main{padding:0 16px 40px;max-width:1100px;margin:auto}
 .tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 input,select,button.b{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
 button.b{cursor:pointer}button.p{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}button.d{color:var(--rd);border-color:var(--rd)}button.b{border-radius:10px;font-weight:500}
-.w{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{color:var(--ac);font-weight:600}
-td select{padding:4px 6px;font-size:12px}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px}table.fx{table-layout: fixed;}
+th,td{padding:5px 4px;border-bottom:1px solid var(--bd);text-align:left;white-space:normal;word-break: break-word;vertical-align: middle}th{color:var(--ac);font-weight:600}
+td select,td input{width:100%;min-width:0;padding:3px 2px;font-size:11px}
 .bar{height:8px;background:var(--bd);border-radius:4px;min-width:80px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#eab308,#facc15);border-radius:4px}
 .tag{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--ac2);color:var(--ac)}
 tr.ok td{background:var(--okbg);box-shadow:inset 3px 0 0 #16a34a}tr.sep td{opacity:.55}tr.ok td:nth-child(3){font-weight:700;color:#4ade80}.okc b{color:#4ade80}td select:disabled{opacity:.6}
 tr.res td{background:#7f1d1d!important;box-shadow:inset 3px 0 0 #ef4444;color:#fecaca}tr.res td:nth-child(3){color:#fecaca;font-weight:700}
 summary{cursor:pointer;color:var(--ac)}
 .pr{display:none}
-@media print{header,nav,.np{display:none!important}.pr{display:block}body{background:#fff;color:#000}.box{border:0;box-shadow:none;background:#fff}.box h2{color:#000}th,td{border:1px solid #999;color:#000}th{color:#000}tr{break-inside:avoid}.pt{color:#000;font-size:15px;margin:0 0 6px}.pg{break-after:page;page-break-after:always}.pg:last-child{break-after:auto;page-break-after:auto}tr.res td{background:#fecaca!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+#printarea{display: none}
+@media print{body.pl header,body.pl nav,body.pl main{display:none!important}body.pl #printarea{display:block}#printarea h2{color:#000;margin:0 0 4px}#printarea .sub{color:#333;margin-bottom:8px}#printarea th,#printarea td{white-space:normal}.pgb{page-break-before:always}tr{break-inside: avoid}}
 </style></head><body>
 <header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
-<nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main>
+<nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main><div id="printarea"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -647,110 +648,86 @@ function mark(k,f,v){if(!canEdit)return;M[k]={...(M[k]||{}),[f]:v};if(db)db.doc(
 function markAll(a){if(!canEdit)return;emps.filter(e=>e.sched===cur).forEach(e=>{M[e.k]={...(M[e.k]||{}),att:a};if(db)db.doc("marks/"+e.k).set(M[e.k]).catch(()=>{})});if(!db)save();refresh();render()}
 function newS(){if(!canEdit)return;const v=document.getElementById("nd").value;if(!v)return;const s=new Date(v+"T00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});cur=s;if(db)db.doc("sessions/"+s.replace(/[^A-Za-z0-9]/g,"-")).set({label:s}).catch(()=>{});else{if(!SS.includes(s))SS.push(s);save()}if(!SS.includes(s))SS.push(s);render()}
 function add(){if(!canEdit)return;const g=i=>document.getElementById(i).value.trim();if(!g("a2"))return;const o={id:g("a1"),name:g("a2"),pos:g("a3"),dept:g("a4"),grp:g("a5"),sched0:"",hired0:g("a6"),stat0:g("a7")||"Probationary"};if(db)db.collection("extra").add(o).catch(()=>{});else{X.unshift({k:"x"+Date.now(),...o});save();refresh();render()}}
-function nav(){const t=[["dash","Dashboard"],["emp","Employees"],["ses","Sessions & attendance"]];document.getElementById("nav").innerHTML=t.map(([k,l])=>`<button class="${tab==k?"on":""}" onclick="tab='${k}';q='';fd='';render()">${l}</button>`).join("");document.getElementById("who").innerHTML="Fernan Valenzuela &middot; "+(canEdit?'Signed in &middot; <a href="#" onclick="logout();return false" style="color:#fde68a">Log out</a>':'View only &middot; <a href="#" onclick="login();return false" style="color:#fde68a">Admin login</a>')}
+function nav(){
+  if(typeof SHARE !== "undefined" && SHARE){
+    document.getElementById("nav").innerHTML="";
+    document.getElementById("who").textContent="Shared list · view only";
+    return;
+  }
+  const t=[["dash","Dashboard"],["emp","Employees"],["ses","Sessions & attendance"]];
+  document.getElementById("nav").innerHTML=t.map(([k,l])=>`<button class="${tab==k?"on":""}" onclick="tab='${k}';q='';fd='';render()">${l}</button>`).join("");
+  document.getElementById("who").innerHTML="Fernan Valenzuela &middot; "+(canEdit?'Signed in &middot; <a href="#" onclick="logout();return false" style="color:#fde68a">Log out</a>':'View only &middot; <a href="#" onclick="login();return false" style="color:#fde68a">Admin login</a>');
+}
 const attSel=e=>`<select ${P().att?"":"disabled"} onchange="mark('${e.k}','att',this.value)"><option value="" ${done(e)?"":"selected"}>Not yet trained</option><option value="Trained" ${done(e)?"selected":""}>Trained</option></select>`;
 function dash(){const n=emps.length,sc=emps.filter(e=>e.sched).length,tr=emps.filter(done).length,ab=n-tr;
-const rows=sessions().map(s=>{const l=emps.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td><div class="bar"><i style="width:${pct(p,l.length)}%"></i></div></td><td>${pct(p,l.length)}%</td></tr>`}).join("");
+const rows=sessions().map(s=>{const l=emps.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td></tr>`}).join("");
 const dr=grps().map(d=>{const l=emps.filter(e=>e.sec===d),p=l.filter(done).length;return`<tr style="cursor:pointer" onclick="tab='emp';eg='${d}';render()"><td><b>${E(d)}</b> →</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td>${pct(p,l.length)}%</td></tr>`}).join("");
 return`<div class="cards"><div class="card"><b>${n}</b><span>Employees</span></div><div class="card okc"><b>${tr}</b><span>Trained</span></div><div class="card"><b>${ab}</b><span>Not yet trained</span></div><div class="card"><b>${pct(tr,n)}%</b><span>Completion</span></div></div>
-<div class="box"><h2>By training session</h2><div class="w"><table><tr><th>Date</th><th>Assigned</th><th>Trained</th><th>Not yet</th><th>Progress</th><th>%</th></tr>${rows||"<tr><td colspan=6>No sessions yet</td></tr>"}</table></div></div>
+<div class="box"><h2>By training session</h2><div class="w"><table><tr><th>Date</th><th>Assigned</th><th>Trained</th></tr>${rows||"<tr><td colspan=3>No sessions yet</td></tr>"}</table></div></div>
 <div class="box"><h2>By Department (CO, PUS, PAD, PWR, PMG)</h2><div class="w"><table><tr><th>Department/Section</th><th>Total</th><th>Trained</th><th>Not Yet Trained</th><th>%</th></tr>${dr}</table></div></div>`}
+const SHARE=new URLSearchParams(location.search).get("dept");
+function deptList(g){return emps.filter(e=>!g||e.sec===g).sort((a,b)=>(+a.id||0)-(+b.id||0))}
 function emp(){const G=eg,gl=grps(),sel=G?[G]:[""];
 const chips=`<div class="tools"><button class="b ${G?"":"p"}" onclick="eg='';q='';render()">All Departments</button>${gl.map(g=>`<button class="b ${g==G?"p":""}" onclick="eg='${g}';q='';render()">${E(g)}</button>`).join("")}</div>`;
-const tools=`<div class="tools"><input id="q" placeholder="Search name, emp no, position" value="${E(q)}" oninput="q=this.value.toLowerCase();render('q')"><select onchange="fs=this.value;render()"><option value="">All dates</option><option value="none" ${fs=="none"?"selected":""}>No date yet</option>${sessions().map(s=>`<option ${s===fs?"selected":""}>${E(s)}</option>`).join("")}</select><button class="b p" onclick="exp()">Export CSV</button></div>`;
+const tools=`<div class="tools"><input id="q" placeholder="Search name, emp no, position" value="${E(q)}" oninput="q=this.value.toLowerCase();render('q')"><select onchange="fs=this.value;render()"><option value="">All dates</option><option value="none" ${fs=="none"?"selected":""}>No date yet</option>${sessions().map(s=>`<option ${s===fs?"selected":""}>${E(s)}</option>`).join("")}</select></div>
+<div class="tools"><button class="b p" onclick="exp()">Export CSV (${E(G||"All")})</button><button class="b" onclick="printList('t')">Print Trained (${E(G||"All")})</button><button class="b" onclick="printList('n')">Print Not Yet Trained (${E(G||"All")})</button><button class="b" onclick="shareLink()">Copy link (${E(G||"All")})</button></div>`;
 const addf=`<details class="tools"><summary>+ Add employee</summary><div class="tools" style="margin-top:8px"><input id="a1" placeholder="Emp no"><input id="a2" placeholder="Full name (Last, First, Middle)"><input id="a3" placeholder="Position"><input id="a4" placeholder="Department / Section"><input type="date" id="a6" title="Hired date"><select id="a7">${STAT.map(s=>`<option>${s}</option>`).join("")}</select><select id="a5">${gl.map(g=>`<option ${g==G?"selected":""}>${E(g)}</option>`).join("")}</select><button class="b p" onclick="add()">Add</button></div></details>`;
+const allSorted=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
 const tables=sel.map(g=>{
-  const allSortedByEmpNo=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
-  const all=emps.filter(e=>g===""||e.sec===g).sort((a,b)=>(+a.id||0)-(+b.id||0));
+  const all=deptList(g);
   const l=all.filter(e=>(!q||(e.name+e.id+e.pos).toLowerCase().includes(q))&&(fs===""||(fs==="none"?!e.sched:e.sched===fs)));
   if(!l.length&&(q||fs!==""))return"";
-
   const rows=l.map((e,idx)=>{
-    const displayRowNo=g===""?allSortedByEmpNo.findIndex(x=>x.k===e.k)+1:idx+1;
-    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}">
-      <td>${displayRowNo}</td>
-      <td>${E(e.id)}</td>
-      <td>${E(e.name)}</td>
-      <td>${E(e.pos)}</td>
-      <td>${E(e.dept)}</td>
-      <td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td>
-      <td><b>${yos(e)}</b></td>
-      <td><select onchange="mark('${e.k}','stat',this.value)">
-        <option value="" ${e.stat?"":"selected"}>—</option>
-        ${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}
-      </select></td>
-      <td><select onchange="mark('${e.k}','sched',this.value)">
-        <option value="">— no date —</option>
-        ${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}
-      </select></td>
-      <td>${attSel(e)}</td>
-    </tr>`;
+    const no=g===""?allSorted.findIndex(x=>x.k===e.k)+1:idx+1;
+    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}"><td>${no}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td><td><b>${yos(e)}</b></td><td><select onchange="mark('${e.k}','stat',this.value)"><option value="" ${e.stat?"":"selected"}>—</option>${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}</select></td><td><select onchange="mark('${e.k}','sched',this.value)"><option value="">— no date —</option>${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}</select></td><td>${attSel(e)}</td></tr>`;
   }).join("");
-
-  return`<div class="box">
-    <h2>${E(g||"All Departments")} · ${all.length} employees · ${all.filter(done).length} trained</h2>
-    <div class="w"><table>
-      <tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Hired Date</th><th>Years of Service</th><th>Employment Status</th><th>Date</th><th>Status</th></tr>${rows}
-    </table></div>
-  </div>`;
+  return `<div class="box"><h2>${E(g||"All Departments")} · ${all.length} employees · ${all.filter(done).length} trained</h2><div class="w"><table class="fx"><colgroup><col style="width:4%"><col style="width:6%"><col style="width:19%"><col style="width:12%"><col style="width:10%"><col style="width:11%"><col style="width:6%"><col style="width:10%"><col style="width:11%"><col style="width:11%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Hired Date</th><th>Years of Service</th><th>Employment Status</th><th>Date</th><th>Status</th></tr>${rows}</table></div></div>`;
 }).join("");
-return`<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Red = resigned</div></div>${tables||'<div class="box">No matching employees</div>'}`;
+return `<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Red = resigned</div></div>${tables||'<div class="box">No matching employees</div>'}`;
 }
-
-function ses(){
-  const ss=sessions(),p=P();
-  if(!cur||!ss.includes(cur))cur=ss[0]||"";
-  const allSortedByEmpNo=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
-  const l=emps.filter(e=>e.sched===cur).sort((a,b)=>(+a.id||0)-(+b.id||0));
-  const tr=l.filter(done),nt=l.filter(e=>!done(e));
-
-  const body=l.map(e=>{
-    const displayRowNo=allSortedByEmpNo.findIndex(x=>x.k===e.k)+1;
-    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}">
-      <td>${displayRowNo}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td>${attSel(e)}</td>
-    </tr>`;
-  }).join("");
-
-      const ptable=(arr,title)=>(grps().filter(g=>arr.some(e=>e.sec===g)).map(g=>{
-    const l=arr.filter(e=>e.sec===g);
-    return `<div class="pg"><h3 class="pt">${title} · ${E(g)} (${l.length}) — ${E(cur)}</h3>
-    <table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Department</th><th>Signature</th></tr>
-    ${l.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":""}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td style="width:150px"></td></tr>`).join("")}
-    </table></div>`;
-  }).join("")||`<div class="pg"><h3 class="pt">${title} (0) — ${E(cur)}</h3><p>None</p></div>`);
-  return`${p.sched?`<div class="box np"><h2>New session</h2><div class="tools"><input type="date" id="nd"><button class="b p" onclick="newS()">Add session</button></div></div>`:""}
-<div class="box">
-  <div class="tools np">
-    <select onchange="cur=this.value;render()">${ss.map(s=>`<option ${s===cur?"selected":""}>${E(s)}</option>`).join("")}</select>
-    ${p.att?`<button class="b" onclick="markAll('Trained')">Mark all trained</button><button class="b d" onclick="markAll('')">Remove mark all trained</button>`:""}
-    <button class="b p" onclick="window.print()">Print monitoring sheet</button>
-  </div>
-  <h2 class="pr">8-Hour Mandatory OSH Training — ${E(cur)}</h2>
-  <div class="sub np">${l.length} participants · ${tr.length} trained · ${nt.length} not yet trained</div>
-  <div class="w np"><table>
-    <tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Department</th><th>Attendance</th></tr>
-    ${body||"<tr><td colspan=5>No participants for this session</td></tr>"}
-  </table></div>
-  <div class="pr">${ptable(tr,"TRAINED")}${ptable(nt,"NOT YET TRAINED")}</div>
-</div>`;
-}
-
 function exp(){
-  const r=[["Emp No","Name","Position","Department","Section / line","Hired Date","Years of Service","Employment Status","Date","Status"],
-    ...emps.map(e=>[e.id,e.name,e.pos,e.sec,e.dept,e.hired,yos(e),e.stat,e.sched,done(e)?"Trained":"Not yet trained"])
-  ];
-  const c=r.map(x=>x.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+  const g=eg,l=deptList(g);
+  const head=["No.","Emp No.","Name","Position","Department","Section / Line","Hired Date","Years of Service","Employment Status","Training Date","Status"];
+  const rows=l.map((e,i)=>[i+1,e.id,e.name,e.pos,e.sec,e.dept,e.hired,yos(e),e.stat,e.sched,done(e)?"Trained":"Not yet trained"]);
+  const c=[head,...rows].map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""').trim()+'"').join(",")).join("\r\n");
   const a=document.createElement("a");
-  a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(c);
-  a.download="osh-training-monitoring.csv";
+  a.href="data:text/csv;charset=utf-8,"+encodeURIComponent("\ufeff"+c);
+  a.download="OSH-Training-"+(g||"All-Departments")+".csv";
   a.click();
 }
-
+function printList(kind){
+  const trained=kind==="t",gs=eg?[eg]:grps(),title=trained?"TRAINED":"NOT YET TRAINED";
+  const today=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  document.getElementById("printarea").innerHTML=gs.map((g,i)=>{
+    const l=deptList(g).filter(e=>trained?done(e):!done(e));
+    const rows=l.map((e,j)=>`<tr><td>${j+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.stat)}</td><td>${E(e.sched)}</td><td style="width:110px"></td></tr>`).join("")||"<tr><td colspan=8>None</td></tr>";
+    return `<div class="${i?"pgb":""}"><h2>8-Hour Mandatory OSH Training — ${title}</h2><div class="sub">Department: ${E(g)} · ${l.length} employees · Printed ${today}</div><table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Employment Status</th><th>Date</th><th>Signature</th></tr>${rows}</table></div>`}).join("");
+  document.body.classList.add("pl");
+  setTimeout(()=>window.print(),50);
+}
+window.addEventListener("afterprint",()=>{document.body.classList.remove("pl");const p=document.getElementById("printarea");if(p)p.innerHTML=""});
+function shareLink(){
+  const g=eg||"ALL",url=location.href.split("#")[0].split("?")[0]+"?dept="+encodeURIComponent(g);
+  const d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:99";
+  d.innerHTML='<div class="box" style="width:min(92vw,420px)"><h2>Shareable link — '+E(g==="ALL"?"All Departments":g)+'</h2><div class="sub" style="margin-bottom:8px">View only. Shows only the Trained and Not Yet Trained list of this department.</div><input id="sl" readonly style="width:100%" value="'+E(url)+'"><div class="tools" style="margin-top:10px"><button class="b p" id="scp">Copy</button><button class="b" id="scl">Close</button></div></div>';
+  document.body.appendChild(d);
+  const i=document.getElementById("sl");i.focus();i.select();
+  document.getElementById("scl").onclick=()=>d.remove();
+  document.getElementById("scp").onclick=()=>{const ok=()=>{document.getElementById("scp").textContent="Copied!"};i.select();(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(ok).catch(()=>{try{document.execCommand("copy");ok()}catch(e){}})};
+}
+function shareView(){
+  const gs=SHARE==="ALL"?grps():[SHARE];
+  const tbl=(arr,cls)=>`<table class="fx"><colgroup><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:20%"><col style="width:20%"><col style="width:14%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Date</th></tr>${arr.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":cls}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.sched)}</td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
+  return gs.map(g=>{
+    const l=deptList(g),tr=l.filter(done),nt=l.filter(e=>!done(e));
+    return `<div class="box"><h2>${E(g)} · ${l.length} employees</h2><h2 style="color:#4ade80">Trained (${tr.length})</h2><div class="w">${tbl(tr,"ok")}</div><h2 style="margin-top:14px">Not Yet Trained (${nt.length})</h2><div class="w">${tbl(nt,"")}</div></div>`}).join("")||'<div class="box">No data</div>';
+}
 function render(k){
   if(!k&&document.activeElement&&document.activeElement.id=="q")k="q";
   nav();
   const app=document.getElementById("app");
-  app.innerHTML=tab=="dash"?dash():tab=="emp"?emp():ses();lock();
+  app.innerHTML=SHARE?shareView():tab=="dash"?dash():tab=="emp"?emp():ses();lock();
   if(k=="q"){
     const i=document.getElementById("q");
     i.focus();
