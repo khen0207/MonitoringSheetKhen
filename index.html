@@ -30,6 +30,13 @@ summary{cursor:pointer;color:var(--ac)}
 .pr{display:none}
 #printarea{display: none}
 @media print{body.pl header,body.pl nav,body.pl main{display:none!important}body.pl #printarea{display:block}#printarea h2{color:#000;margin:0 0 4px}#printarea .sub{color:#333;margin-bottom:8px}#printarea th,#printarea td{white-space:normal}.pgb{page-break-before:always}tr{break-inside: avoid}}
+html.shr{--bg:#fff;--card:#fff;--tx:#000;--mu:#333;--bd:#999;--ac:#000;--ac2:#eee;--okbg:#dcfce7;--rd:#b91c1c;color-scheme:light}
+html.shr header{background:#fff;color:#000;border-bottom:2px solid #000;border-radius:0;box-shadow:none}
+html.shr h1{color:#000}html.shr header .sub{color:#333}
+html.shr .box,html.shr .card{box-shadow:none;border-color:#999}
+html.shr tr.ok td{box-shadow:none;color:#000}
+html.shr tr.ok td:nth-child(3),html.shr tr.res td:nth-child(3){font-weight:400;color:inherit}
+html.shr tr.res td{background:#fee2e2!important;color:#7f1d1d;box-shadow:none}
 </style></head><body>
 <header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
 <nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main><div id="printarea"></div>
@@ -687,7 +694,7 @@ function printSes(){
   const base=emps.filter(e=>e.sched===cur).sort((a,b)=>(+a.id||0)-(+b.id||0));
   const gs=grps().filter(g=>base.some(e=>e.sec===g));
   const css="<style>#printarea,#printarea h2,#printarea h3,#printarea .sub,#printarea th,#printarea td{color:#000!important}#printarea table{border-collapse:collapse;width:100%;margin-bottom:14px}#printarea th,#printarea td{border:1px solid #000!important;padding:5px 4px;font-size:12px}#printarea h3{margin:10px 0 4px;font-size:14px}</style>";
-  const tbl=arr=>`<table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Signature</th></tr>${arr.map((e,j)=>`<tr><td>${j+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td style="width:110px"></td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
+  const tbl=arr=>`<table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Signature</th></tr>${arr.map((e,j)=>`<tr><td>${j+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td style="width:110px"></td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
   document.getElementById("printarea").innerHTML=css+(gs.map((g,i)=>{
     const l=base.filter(e=>e.sec===g),tr=l.filter(done),nt=l.filter(e=>!done(e));
     return `<div class="${i?"pgb":""}"><h2>8-Hour Mandatory OSH Training Monitoring</h2><div class="sub">Department: ${E(g)} · Training Date: ${E(cur)} · ${l.length} participants · Printed ${today}</div><h3>TRAINED (${tr.length})</h3>${tbl(tr)}<h3>NOT YET TRAINED (${nt.length})</h3>${tbl(nt)}</div>`}).join("")||"<p>No participants for this date.</p>");
@@ -717,7 +724,7 @@ return `<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained
 }
 function exp(){
   const g=eg,l=deptList(g);
-  const head=["No.","Emp No.","Name","Position","Department","Section / Line","Hired Date","Years of Service","Employment Status","Training Date","Status"];
+  const head=["No.","Emp No.","Name","Position","Department","Department / Section","Hired Date","Years of Service","Employment Status","Training Date","Status"];
   const rows=l.map((e,i)=>[i+1,e.id,e.name,e.pos,e.sec,e.dept,e.hired,yos(e),e.stat,e.sched,done(e)?"Trained":"Not yet trained"]);
   const c=[head,...rows].map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""').trim()+'"').join(",")).join("\r\n");
   const a=document.createElement("a");
@@ -728,10 +735,11 @@ function exp(){
 function printList(kind){
   const trained=kind==="t",gs=eg?[eg]:grps(),title=trained?"TRAINED":"NOT YET TRAINED";
   const today=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
-  document.getElementById("printarea").innerHTML=gs.map((g,i)=>{
+  const css="<style>#printarea,#printarea h2,#printarea h3,#printarea .sub,#printarea th,#printarea td{color:#000!important}#printarea table{border-collapse:collapse;width:100%;margin-bottom:14px}#printarea th,#printarea td{border:1px solid #000!important;padding:5px 4px;font-size:12px}#printarea h3{margin:10px 0 4px;font-size:14px}</style>";
+  document.getElementById("printarea").innerHTML=css+gs.map((g,i)=>{
     const l=deptList(g).filter(e=>trained?done(e):!done(e));
     const rows=l.map((e,j)=>`<tr><td>${j+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.stat)}</td><td>${E(e.sched)}</td><td style="width:110px"></td></tr>`).join("")||"<tr><td colspan=8>None</td></tr>";
-    return `<div class="${i?"pgb":""}"><h2>8-Hour Mandatory OSH Training — ${title}</h2><div class="sub">Department: ${E(g)} · ${l.length} employees · Printed ${today}</div><table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Employment Status</th><th>Date</th><th>Signature</th></tr>${rows}</table></div>`}).join("");
+    return `<div class="${i?"pgb":""}"><h2>8-Hour Mandatory OSH Training — ${title}</h2><div class="sub">Department: ${E(g)} · ${l.length} employees · Printed ${today}</div><table><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Employment Status</th><th>Date</th><th>Signature</th></tr>${rows}</table></div>`}).join("");
   document.body.classList.add("pl");
   setTimeout(()=>window.print(),50);
 }
@@ -748,7 +756,7 @@ function shareLink(){
 }
 function shareView(){
   const gs=SHARE==="ALL"?grps():[SHARE];
-  const tbl=(arr,cls)=>`<table class="fx"><colgroup><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:20%"><col style="width:20%"><col style="width:14%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Date</th></tr>${arr.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":cls}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.sched)}</td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
+  const tbl=(arr,cls)=>`<table class="fx"><colgroup><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:20%"><col style="width:20%"><col style="width:14%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Date</th></tr>${arr.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":cls}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.sched)}</td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
   return gs.map(g=>{
     const l=deptList(g),tr=l.filter(done),nt=l.filter(e=>!done(e));
     return `<div class="box"><h2>${E(g)} · ${l.length} employees</h2><h2 style="color:#4ade80">Trained (${tr.length})</h2><div class="w">${tbl(tr,"ok")}</div><h2 style="margin-top:14px">Not Yet Trained (${nt.length})</h2><div class="w">${tbl(nt,"")}</div></div>`}).join("")||'<div class="box">No data</div>';
@@ -756,6 +764,8 @@ function shareView(){
 function render(k){
   if(!k&&document.activeElement&&document.activeElement.id=="q")k="q";
   nav();
+    nav();
+  document.documentElement.classList.toggle("shr",!!SHARE);
   const app=document.getElementById("app");
   app.innerHTML=SHARE?shareView():tab=="dash"?dash():tab=="emp"?emp():ses();lock();
   if(k=="q"){
