@@ -25,7 +25,6 @@ td select,td input{width:100%;min-width:0;padding:3px 2px;font-size:11px}
 .bar{height:8px;background:var(--bd);border-radius:4px;min-width:80px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#eab308,#facc15);border-radius:4px}
 .tag{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--ac2);color:var(--ac)}
 tr.ok td{background:var(--okbg);box-shadow:inset 3px 0 0 #16a34a}tr.sep td{opacity:.55}tr.ok td:nth-child(3){font-weight:700;color:#4ade80}.okc b{color:#4ade80}td select:disabled{opacity:.6}
-tr.res td{background:#7f1d1d!important;box-shadow:inset 3px 0 0 #ef4444;color:#fecaca}tr.res td:nth-child(3){color:#fecaca;font-weight:700}
 summary{cursor:pointer;color:var(--ac)}
 .pr{display:none}
 #printarea{display: none}
@@ -35,8 +34,7 @@ html.shr header{background:#fff;color:#000;border-bottom:2px solid #000;border-r
 html.shr h1{color:#000}html.shr header .sub{color:#333}
 html.shr .box,html.shr .card{box-shadow:none;border-color:#999}
 html.shr tr.ok td{box-shadow:none;color:#000}
-html.shr tr.ok td:nth-child(3),html.shr tr.res td:nth-child(3){font-weight:400;color:inherit}
-html.shr tr.res td{background:#fee2e2!important;color:#7f1d1d;box-shadow:none}
+html.shr tr.ok td:nth-child(3){font-weight:400;color:inherit}
 </style></head><body>
 <header><h1>8-Hour Mandatory OSH Training Monitoring</h1><div class="sub" id="who">Loading…</div></header>
 <nav id="nav"></nav><main id="app"><noscript><p style="padding:16px">This system needs JavaScript. Open this file in Chrome, Safari or Edge, not in a file preview.</p></noscript></main><div id="printarea"></div>
@@ -641,9 +639,9 @@ try{const L=JSON.parse(localStorage.getItem(KEY)||"{}");M=L.M||{};X=L.X||[];SS=L
 let tab="dash",q="",fd="",fs="",fg="",eg="",lim=60,cur="";
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({M,X,SS}))}catch(e){}};
 function secOf(e){const d=(e.dept||"").toUpperCase();if(/^(QUALITY CONTROL|QA\/?QC)/.test(d))return d.includes("AD")?"QAQCPADPWR":"QAQCPUS";return e.grp==="CO MGT"?"CO":(e.grp||"Other")}
-function refresh(){emps=[...X,...BASE].map(e=>{const m=M[e.k]||{};return{...e,sec:secOf(e),sched:m.sched!==undefined?m.sched:(e.sched0||""),att:m.att||"",hired:m.hired!==undefined?m.hired:(e.hired0||""),stat:m.stat!==undefined?m.stat:(e.stat0||"")}})}
-const STAT=["Probationary","Regular","Separated","Resigned"];
-const active=e=>e.stat!=="Resigned"&&e.stat!=="Separated";
+function refresh(){emps=[...X,...BASE].map(e=>{const m=M[e.k]||{},stat=m.stat!==undefined?m.stat:(e.stat0||"");return{...e,sec:secOf(e),sched:m.sched!==undefined?m.sched:(e.sched0||""),att:m.att||"",hired:m.hired!==undefined?m.hired:(e.hired0||""),stat:stat==="Resigned"?"Separated":stat}})}
+const STAT=["Probationary","Regular","Separated"];
+const active=e=>e.stat!=="Separated";
 const yos=e=>{if(!e.hired)return"";const h=new Date(e.hired+"T00:00");if(isNaN(h))return"";return Math.max(0,(Date.now()-h)/864e5/365.25).toFixed(2)};
 const P=()=>({sched:canEdit,att:canEdit});
 const E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -667,9 +665,9 @@ function nav(){
   document.getElementById("who").innerHTML="Fernan Valenzuela &middot; "+(canEdit?'Signed in &middot; <a href="#" onclick="logout();return false" style="color:#fde68a">Log out</a>':'View only &middot; <a href="#" onclick="login();return false" style="color:#fde68a">Admin login</a>');
 }
 const attSel=e=>`<select ${P().att?"":"disabled"} onchange="mark('${e.k}','att',this.value)"><option value="" ${done(e)?"":"selected"}>Not yet trained</option><option value="Trained" ${done(e)?"selected":""}>Trained</option></select>`;
-function dash(){const n=emps.length,sc=emps.filter(e=>e.sched).length,tr=emps.filter(done).length,ab=n-tr;
-const rows=sessions().map(s=>{const l=emps.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td></tr>`}).join("");
-const dr=grps().map(d=>{const l=emps.filter(e=>e.sec===d),p=l.filter(done).length;return`<tr style="cursor:pointer" onclick="tab='emp';eg='${d}';render()"><td><b>${E(d)}</b> →</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td>${pct(p,l.length)}%</td></tr>`}).join("");
+function dash(){const current=emps.filter(active),n=current.length,tr=current.filter(done).length,ab=n-tr;
+const rows=sessions().map(s=>{const l=current.filter(e=>e.sched===s),p=l.filter(done).length;return`<tr><td>${E(s)}</td><td>${l.length}</td><td>${p}</td></tr>`}).join("");
+const dr=grps().map(d=>{const l=current.filter(e=>e.sec===d),p=l.filter(done).length;return`<tr style="cursor:pointer" onclick="tab='emp';eg='${d}';render()"><td><b>${E(d)}</b> →</td><td>${l.length}</td><td>${p}</td><td>${l.length-p}</td><td>${pct(p,l.length)}%</td></tr>`}).join("");
 return`<div class="cards"><div class="card"><b>${n}</b><span>Employees</span></div><div class="card okc"><b>${tr}</b><span>Trained</span></div><div class="card"><b>${ab}</b><span>Not yet trained</span></div><div class="card"><b>${pct(tr,n)}%</b><span>Completion</span></div></div>
 <div class="box"><h2>By training session</h2><div class="w"><table><tr><th>Date</th><th>Assigned</th><th>Trained</th></tr>${rows||"<tr><td colspan=3>No sessions yet</td></tr>"}</table></div></div>
 <div class="box"><h2>By Department (CO, PUS, PAD, PWR, PMG)</h2><div class="w"><table><tr><th>Department/Section</th><th>Total</th><th>Trained</th><th>Not Yet Trained</th><th>%</th></tr>${dr}</table></div></div>`}
@@ -679,7 +677,7 @@ function ses(){
   const allSorted=[...emps].sort((a,b)=>(+a.id||0)-(+b.id||0));
   const l=allSorted.filter(e=>e.sched===cur);
   const tr=l.filter(done).length;
-  const rows=l.map(e=>`<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}"><td>${allSorted.findIndex(x=>x.k===e.k)+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td>${attSel(e)}</td></tr>`).join("");
+  const rows=l.map(e=>`<tr class="${done(e)?"ok":""}${e.stat==="Separated"?" sep":""}"><td>${allSorted.findIndex(x=>x.k===e.k)+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.sec)}</td><td>${attSel(e)}</td></tr>`).join("");
   return `${canEdit?`<div class="box"><h2>New session</h2><div class="tools"><input type="date" id="nd"><button class="b p" onclick="newS()">Add session</button></div></div>`:""}
   <div class="box"><div class="tools"><select onchange="cur=this.value;render()">${ss.length?ss.map(s=>`<option ${s===cur?"selected":""}>${E(s)}</option>`).join(""):"<option value=''>No sessions yet</option>"}</select>
   ${canEdit?`<button class="b" onclick="markAll('Trained')">Mark all trained</button><button class="b d" onclick="markAll('')">Remove mark all trained</button>`:""}
@@ -717,11 +715,11 @@ const tables=sel.map(g=>{
   if(!l.length&&(q||fs!==""))return"";
   const rows=l.map((e,idx)=>{
     const no=g===""?allSorted.findIndex(x=>x.k===e.k)+1:idx+1;
-    return `<tr class="${e.stat==="Resigned"?"res":done(e)?"ok":""}${e.stat==="Separated"?" sep":""}"><td>${no}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td><td><b>${yos(e)}</b></td><td><select onchange="mark('${e.k}','stat',this.value)"><option value="" ${e.stat?"":"selected"}>—</option>${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}</select></td><td><select onchange="mark('${e.k}','sched',this.value)"><option value="">— no date —</option>${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}</select></td><td>${attSel(e)}</td></tr>`;
+    return `<tr class="${done(e)?"ok":""}${e.stat==="Separated"?" sep":""}"><td>${no}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td><input type="date" value="${E(e.hired)}" onchange="mark('${e.k}','hired',this.value)"></td><td><b>${yos(e)}</b></td><td><select onchange="mark('${e.k}','stat',this.value)"><option value="" ${e.stat?"":"selected"}>—</option>${STAT.map(s=>`<option ${s===e.stat?"selected":""}>${s}</option>`).join("")}</select></td><td><select onchange="mark('${e.k}','sched',this.value)"><option value="">— no date —</option>${sessions().map(s=>`<option ${s===e.sched?"selected":""}>${E(s)}</option>`).join("")}</select></td><td>${attSel(e)}</td></tr>`;
   }).join("");
   return `<div class="box"><h2>${E(g||"All Departments")} · ${all.length} employees · ${all.filter(done).length} trained</h2><div class="w"><table class="fx"><colgroup><col style="width:4%"><col style="width:6%"><col style="width:19%"><col style="width:12%"><col style="width:10%"><col style="width:11%"><col style="width:6%"><col style="width:10%"><col style="width:11%"><col style="width:11%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Section / Line</th><th>Hired Date</th><th>Years of Service</th><th>Employment Status</th><th>Date</th><th>Status</th></tr>${rows}</table></div></div>`;
 }).join("");
-return `<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Red = resigned</div></div>${tables||'<div class="box">No matching employees</div>'}`;
+return `<div class="box">${chips}${tools}${addf}<div class="sub">Green = trained · Gray = separated</div></div>${tables||'<div class="box">No matching employees</div>'}`;
 }
 function exp(){
   const g=eg,l=deptList(g).filter(active);
@@ -757,7 +755,7 @@ function shareLink(){
 }
 function shareView(){
   const gs=SHARE==="ALL"?grps():[SHARE];
-  const tbl=(arr,cls)=>`<table class="fx"><colgroup><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:20%"><col style="width:20%"><col style="width:14%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Date</th></tr>${arr.map((e,i)=>`<tr class="${e.stat==="Resigned"?"res":cls}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.sched)}</td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
+  const tbl=(arr,cls)=>`<table class="fx"><colgroup><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:20%"><col style="width:20%"><col style="width:14%"></colgroup><tr><th>No.</th><th>Emp No.</th><th>Name</th><th>Position</th><th>Department / Section</th><th>Date</th></tr>${arr.map((e,i)=>`<tr class="${cls}"><td>${i+1}</td><td>${E(e.id)}</td><td>${E(e.name)}</td><td>${E(e.pos)}</td><td>${E(e.dept)}</td><td>${E(e.sched)}</td></tr>`).join("")||"<tr><td colspan=6>None</td></tr>"}</table>`;
   return gs.map(g=>{
     const l=deptList(g).filter(active),tr=l.filter(done),nt=l.filter(e=>!done(e));
     return `<div class="box"><h2>${E(g)} · ${l.length} employees</h2><h2 style="color:#4ade80">Trained (${tr.length})</h2><div class="w">${tbl(tr,"ok")}</div><h2 style="margin-top:14px">Not Yet Trained (${nt.length})</h2><div class="w">${tbl(nt,"")}</div></div>`}).join("")||'<div class="box">No data</div>';
